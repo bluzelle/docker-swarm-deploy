@@ -29,5 +29,5 @@ LOCAL_IP=192.168.0.34
 3. Launch the swarm inside docker using the compose file.
 
 ```
-$ docker compose up
+$ docker-compose up
 ```
