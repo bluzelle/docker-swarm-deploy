@@ -1,0 +1,29 @@
+env:
+  global:
+    - COMMIT=${TRAVIS_COMMIT::8}
+    - secure: HdUH+uXtnNhGNOaVHjUtDrsvs/Zy/M5hZGUTstKybVBfoR2sbSJDesLANnxRymG4fiNGvmGV4Ktec78XickOaz9lLQeJubYARwDZkSatlvsK5/TPFvqeVAbRk+Q8gw2Nbu0Bm17aBz+UEIhDlmDUh8TYZvT9MQ7WKtWeFsc5IMR6KIGOR9/S+0EWOjcDgJkrYftjHSWAZUkw62MQEecyPtrn73LYSBij/wJ84Yt8D+Fo6ytPdZL+52uXZi85kVDziGXIVNI2/hJQ1czPN7XIHEqsxSEjoSmBtW9afGxDUPkMwa3sBqa2VGO1dXM7iqJEdwEqVin1xfP1wYnB/uL0oSdfQSvI4HeHFy4WGWchy2XTkUbK1lF4hmEPInOvafsUaAUoJcM6OgydzM5kTrHfbdOKSbjjSNy0/mgGvHwPTGz0Db2pfGXwN71+vQO7V4ZKtEJKncSUBuwOwUhDvu/qpjKf4sPEHB/x+dV6NbtEb9f/S0nq+UUB0jIdaD52OMwCU5PTXk3MtKDt7zJjfta1TERF2xMPxt4VbxY73hAdHvI/c9bTt9vy51Ox+KcNLKQMoxN6J05YRWjS3eDtEMrMhx6Bz/gd+7LOzqNIouQ1HEjVN8DrNk7bvYqn/S1zcp7+Rzo/Sse7AowiOfyWbOEYcpn6aOczK/USnG1nEP2Ed4E=
+    - secure: zupTH+NSMvepuQm7Wv2B4WO6egF7j1XfgV9FkYYbIfFSxpooAOu11d2dRbRLTJH83SlFJnW6ZphkT/1w8FwLMqJwKR5Um7H4IiVsKIqsjfpeUMxE6dpeKzL49iUhKZoU7dv17dLDJNPBxCwAuX0+avCbSo1DkQi6Rsn/nLPZXLtoSgvHjSFhGd1AcUrK3EmOaZsbpsuDQLkETi09Kc4bVd610+5bvo05VkYIABLS5N37qMewJM6b1Lum7PJ43vTCeR36xYPuEqr09gARF2zCvl0rUxQqQUeq2W5vZ+tWJZIIfCn8/0fFtC/j05rEHmpZDTLuDS57qD9X3OFTw6zqUA0F1wGz1ixsAIE1LLISaH5PETBb59lIE8rZyXI9xKz4Oj7bwOH0IrwkipyULmkbY0Iw+kiWs9Y5uAfV982EGldE6Azedkc8U4HCFTCl0qealbAl9/80FIL7NJZXf1uMLj+peObOiEq+WMfTn/5z69rgsmL3UDEp87IglABbqDY6DzQwj4PXiv4DWKrpNEkfsrsd81HWN0xDuWxL0NikWzW6Au3xYuVg53ukEZHhxl2gODLA8OmfSoYc8aRdS4Dk4WYr4tlSPIGHdF/WC2LU2NZnKtKZ3BimnMC2myJCwhcf4tuF6k5oujjHXd6EL1aRbI1lOYKgqObmW2Lfbr9ZPPU=
+
+matrix:
+  include:
+    - services: docker
+      env:
+      - REPO=bluzelle/swarmdb
+      - DOCKERFILE_DIR=swarm-node
+    - services: docker
+      env:
+      - REPO=bluzelle/peerlist-server
+      - DOCKERFILE_DIR=peerlist-server
+
+before_install:
+  - docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}"
+
+script:
+  - cd ${DOCKERFILE_DIR}
+  - travis_wait 30 docker build -t ${REPO}:${COMMIT} .
+
+after_success:
+  - export TAG=`if [ "${TRAVIS_BRANCH}" == "master" ]; then echo "latest"; else echo ${TRAVIS_BRANCH}; fi`
+  - docker tag ${REPO}:${COMMIT} ${REPO}:${TAG}
+  - docker tag ${REPO}:${COMMIT} ${REPO}:travis-${TRAVIS_BUILD_NUMBER}
+  - docker push ${REPO}

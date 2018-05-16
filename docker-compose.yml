@@ -2,7 +2,7 @@ version: '3'
 
 services:
   swarm01:
-    image: bluzelle/swarmdb:alpha
+    image: bluzelle/swarmdb:latest
     ports:
       - "51010:51010"
     environment:
@@ -10,7 +10,10 @@ services:
       SWARM_NAME: "swarm01"
       SWARM_PORT: "51010"
       SWARM_BOOTSTRAP_URL: "http://${LOCAL_IP}/peerlist.json"
+      NODE_DEBUG_LOGGING: "true"
       LOCAL_IP: ${LOCAL_IP}
+      ETHEREUM_ADDRESS: ${ETHEREUM_ADDRESS}
+      ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
     expose:
       - "51010"
     networks:
@@ -19,7 +22,7 @@ services:
       - /tmp:/tmp/swarm_home
 
   swarm02:
-    image: bluzelle/swarmdb:alpha
+    image: bluzelle/swarmdb:latest
     ports:
       - "51011:51011"
     environment:
@@ -27,7 +30,10 @@ services:
       SWARM_NAME: "swarm02"
       SWARM_PORT: "51011"
       SWARM_BOOTSTRAP_URL: "http://${LOCAL_IP}/peerlist.json"
+      NODE_DEBUG_LOGGING: "true"
       LOCAL_IP: ${LOCAL_IP}
+      ETHEREUM_ADDRESS: ${ETHEREUM_ADDRESS}
+      ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
     expose:
       - "51011"
     networks:
@@ -36,7 +42,7 @@ services:
       - /tmp:/tmp/swarm_home
 
   swarm03:
-      image: bluzelle/swarmdb:alpha
+      image: bluzelle/swarmdb:latest
       ports:
         - "51012:51012"
       environment:
@@ -44,7 +50,10 @@ services:
         SWARM_NAME: "swarm03"
         SWARM_PORT: "51012"
         SWARM_BOOTSTRAP_URL: "http://${LOCAL_IP}/peerlist.json"
+        NODE_DEBUG_LOGGING: "true"
         LOCAL_IP: ${LOCAL_IP}
+        ETHEREUM_ADDRESS: ${ETHEREUM_ADDRESS}
+        ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
       expose:
         - "51012"
       networks:
