@@ -23,10 +23,31 @@ In the above case the IP address of the local interface is "192.168.0.34"
 $ cat .env
 
 ```
+...
 LOCAL_IP=192.168.0.34
+...
 ```
 
-3. Launch the swarm inside docker using the compose file.
+3. Create an account with Etherscan: https://etherscan.io/register
+
+4. Create an Etherscan API KEY by clicking Developers->API-KEYs
+
+5. Modify the .env file at the same level of the docker-compose to include the API key
+
+```
+...
+ETHEREUM_IO_API_TOKEN=***********************
+...
+```
+
+6. Modify the .env file at the same level of the docker-compose to include your Ethereum address or the sample provided below
+
+```
+...
+ETHEREUM_ADDRESS=0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a
+...
+```
+7. Launch the swarm inside docker using the compose file.
 
 ```
 $ docker-compose up
