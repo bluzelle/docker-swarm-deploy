@@ -10,7 +10,7 @@ RUN set -x \
 EXPOSE 8080
 RUN mkdir -p /var/www
 
-COPY templates /tmp/peerlist.json.template
+COPY templates/peerlist.json.template /tmp/peerlist.json.template
 
 ENTRYPOINT envsubst < /tmp/peerlist.json.template > /var/www/peerlist.json \
     && cd /var/www \
