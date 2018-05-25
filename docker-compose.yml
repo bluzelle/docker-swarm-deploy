@@ -20,15 +20,16 @@ services:
       - swarmnet
     volumes:
       - /tmp:/tmp/swarm_home
-
+    depends_on:
+      - "peers-server"
   swarm02:
     image: bluzelle/swarmdb:latest
     ports:
-      - "51011:51011"
+      - "51011:51010"
     environment:
       SWARM_UUID: "c864516b-3c95-4721-ad3e-a8dccd0d8349"
       SWARM_NAME: "swarm02"
-      SWARM_PORT: "51011"
+      SWARM_PORT: "51010"
       SWARM_BOOTSTRAP_URL: "http://${LOCAL_IP}/peerlist.json"
       NODE_DEBUG_LOGGING: "true"
       LOCAL_IP: ${LOCAL_IP}
@@ -40,15 +41,17 @@ services:
       - swarmnet
     volumes:
       - /tmp:/tmp/swarm_home
+    depends_on:
+      - "peers-server"
 
   swarm03:
       image: bluzelle/swarmdb:latest
       ports:
-        - "51012:51012"
+        - "51012:51010"
       environment:
         SWARM_UUID: "137a8403-52ec-43b7-8083-91391d4c5e67"
         SWARM_NAME: "swarm03"
-        SWARM_PORT: "51012"
+        SWARM_PORT: "51010"
         SWARM_BOOTSTRAP_URL: "http://${LOCAL_IP}/peerlist.json"
         NODE_DEBUG_LOGGING: "true"
         LOCAL_IP: ${LOCAL_IP}
@@ -60,6 +63,8 @@ services:
         - swarmnet
       volumes:
         - /tmp:/tmp/swarm_home
+      depends_on:
+      - "peers-server"
 
   peers-server:
     image: bluzelle/peerlist-server
