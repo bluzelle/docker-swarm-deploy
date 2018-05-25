@@ -40,7 +40,7 @@ ETHEREUM_IO_API_TOKEN=***********************
 ...
 ```
 
-6. Modify the .env file at the same level of the docker-compose to include your Ethereum address or the sample provided below
+6. Modify the .env file at the same level of the docker-compose to include a Ethereum mainnet address that contains tokens or use the sample address provided below
 
 ```
 ...
