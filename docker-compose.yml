@@ -5,6 +5,7 @@ services:
     image: bluzelle/swarmdb:latest
     ports:
       - "51010:51010"
+      - "8080:8080"
     environment:
       SWARM_UUID: "92b8bac6-3242-452a-9090-1aa48afd71a3"
       SWARM_NAME: "swarm01"
@@ -16,16 +17,19 @@ services:
       ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
     expose:
       - "51010"
+      - "8080"
     networks:
       - swarmnet
     volumes:
       - /tmp:/tmp/swarm_home
     depends_on:
       - "peers-server"
+      
   swarm02:
     image: bluzelle/swarmdb:latest
     ports:
       - "51011:51010"
+      - "8081:8081"
     environment:
       SWARM_UUID: "c864516b-3c95-4721-ad3e-a8dccd0d8349"
       SWARM_NAME: "swarm02"
@@ -37,6 +41,7 @@ services:
       ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
     expose:
       - "51011"
+      - "8081"  
     networks:
       - swarmnet
     volumes:
@@ -48,6 +53,7 @@ services:
       image: bluzelle/swarmdb:latest
       ports:
         - "51012:51010"
+        - "8082:8082"
       environment:
         SWARM_UUID: "137a8403-52ec-43b7-8083-91391d4c5e67"
         SWARM_NAME: "swarm03"
@@ -59,12 +65,13 @@ services:
         ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
       expose:
         - "51012"
+        - "8082"
       networks:
         - swarmnet
       volumes:
         - /tmp:/tmp/swarm_home
       depends_on:
-      - "peers-server"
+        - "peers-server"
 
   peers-server:
     image: bluzelle/peerlist-server
