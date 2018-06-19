@@ -3,18 +3,21 @@
    "name": "daemon01",
    "host": "${LOCAL_IP}",
    "port": 51010,
-   "uuid": "92b8bac6-3242-452a-9090-1aa48afd71a3"
+   "uuid": "92b8bac6-3242-452a-9090-1aa48afd71a3",
+   "http_port" : 8080
  },
  {
    "name": "daemon02",
    "host": "${LOCAL_IP}",
    "port": 51011,
-   "uuid": "c864516b-3c95-4721-ad3e-a8dccd0d8349"
+   "uuid": "c864516b-3c95-4721-ad3e-a8dccd0d8349",
+   "http_port" : 8081
  },
  {
    "name": "daemon03",
    "host": "${LOCAL_IP}",
    "port": 51012,
-   "uuid": "137a8403-52ec-43b7-8083-91391d4c5e67"
+   "uuid": "137a8403-52ec-43b7-8083-91391d4c5e67",
+   "http_port" : 8082
  }
 ]
