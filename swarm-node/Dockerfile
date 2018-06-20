@@ -10,7 +10,9 @@ RUN set -x \
         software-properties-common \
         python-software-properties
 
-RUN sh -c "echo 'deb https://bluzelle.jfrog.io/bluzelle/debian-local all stable' >> /etc/apt/sources.list"
+ARG DEBIAN_COMPONENT=stable
+
+RUN sh -c "echo 'deb https://bluzelle.jfrog.io/bluzelle/debian-local all $DEBIAN_COMPONENT' >> /etc/apt/sources.list"
 
 RUN set -x \
     && add-apt-repository ppa:ubuntu-toolchain-r/test \
