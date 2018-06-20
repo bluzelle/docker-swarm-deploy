@@ -17,7 +17,7 @@ before_install:
 script:
   - export DEBIAN_COMPONENT=`if [ "${TRAVIS_BRANCH}" == "master" ]; then echo "stable"; else echo "unstable"; fi`
   - cd ${DOCKERFILE_DIR}
-  - docker build --build_arg DEBIAN_COMPONENT=$DEBIAN_COMPONENT -t ${REPO}:${COMMIT} .
+  - docker build --build-arg DEBIAN_COMPONENT=$DEBIAN_COMPONENT -t ${REPO}:${COMMIT} .
 
 after_success:
   - export TAG=`if [ "${TRAVIS_BRANCH}" == "master" ]; then echo "latest"; else echo ${TRAVIS_BRANCH}; fi`
