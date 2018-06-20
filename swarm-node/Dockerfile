@@ -13,12 +13,16 @@ RUN set -x \
 ARG DEBIAN_COMPONENT=stable
 
 RUN sh -c "echo 'deb https://bluzelle.jfrog.io/bluzelle/debian-local all $DEBIAN_COMPONENT' >> /etc/apt/sources.list"
+RUN sh -c "echo 'deb http://ppa.launchpad.net/maarten-fonville/protobuf/ubuntu trusty main' >> /etc/apt/sources.list"
+
 
 RUN set -x \
     && add-apt-repository ppa:ubuntu-toolchain-r/test \
     && apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates --allow-unauthenticated \
         bluzelle-swarmdb \
+        libprotobuf-dev \
+        protobuf-compiler \
         libstdc++6
 
 ARG SWARM_NAME
