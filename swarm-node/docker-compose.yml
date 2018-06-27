@@ -5,6 +5,7 @@ services:
     image: bluzelle/swarmdb:latest
     ports:
       - "51010:51010"
+      - "8080:8080"
     environment:
       SWARM_UUID: "${SWARM_UUID}"
       SWARM_NAME: "$SWARM_NAME}"
@@ -15,5 +16,6 @@ services:
       ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
     expose:
       - "51010"
+      - "8080"
     volumes:
       - /tmp:/tmp/swarm_home
