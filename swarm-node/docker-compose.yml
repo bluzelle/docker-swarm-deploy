@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  swarm_node:
+    image: bluzelle/swarmdb:latest
+    ports:
+      - "51010:51010"
+    environment:
+      SWARM_UUID: "${SWARM_UUID}"
+      SWARM_NAME: "$SWARM_NAME}"
+      SWARM_PORT: "51010"
+      SWARM_BOOTSTRAP_URL: "${SWARM_BOOTSTRAP_URL}"
+      NODE_DEBUG_LOGGING: "true"
+      ETHEREUM_ADDRESS: ${ETHEREUM_ADDRESS}
+      ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
+    expose:
+      - "51010"
+    volumes:
+      - /tmp:/tmp/swarm_home

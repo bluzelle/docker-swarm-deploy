@@ -1,23 +1,46 @@
 [
  {
-   "name": "daemon01",
-   "host": "${LOCAL_IP}",
+   "name": "testnet-1",
+   "host": "193.113.42.151",
    "port": 51010,
    "uuid": "92b8bac6-3242-452a-9090-1aa48afd71a3",
    "http_port" : 8080
  },
  {
-   "name": "daemon02",
-   "host": "${LOCAL_IP}",
-   "port": 51011,
-   "uuid": "c864516b-3c95-4721-ad3e-a8dccd0d8349",
-   "http_port" : 8081
+   "name": "testnet-2",
+   "host": "193.113.42.144",
+   "port": 51010,
+   "uuid": "c864516b-3c95-4721-ad3e-a8dccd0d8349"
  },
  {
-   "name": "daemon03",
-   "host": "${LOCAL_IP}",
-   "port": 51012,
-   "uuid": "137a8403-52ec-43b7-8083-91391d4c5e67",
-   "http_port" : 8082
+   "name": "testnet-3",
+   "host": "13.78.142.65",
+   "port": 51010,
+   "uuid": "137a8403-52ec-43b7-8083-91391d4c5e67"
+ },
+ {
+   "name": "testnet-4",
+   "host": "13.78.143.176",
+   "port": 51010,
+   "uuid": "1a1dbbd9-a470-420e-943e-dc7ed3db3cff"
+ },
+ {
+   "name": "testnet-5",
+   "host": "13.78.130.170",
+   "port": 51010,
+   "uuid": "316182df-b548-4b86-83bd-911509d57dc2"
+ },
+ {
+   "name": "testnet-6",
+   "host": "13.78.136.55",
+   "port": 51010,
+   "uuid": "d27ab361-1754-4dc7-8829-792fae39759c"
+ },
+ {
+   "name": "testnet-7",
+   "host": "$13.78.134.208",
+   "port": 51010,
+   "uuid": "2548487b-690f-4277-a034-e7dbd4bfd4e4"
+>>>>>>> DEV-24 Creating testnet config
  }
 ]

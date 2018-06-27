@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  peers-server:
+    image: bluzelle/peerlist-server
+    ports:
+      - "80:8080"
+    expose:
+      - "8080"
+
