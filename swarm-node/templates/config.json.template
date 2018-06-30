@@ -7,4 +7,6 @@
   "uuid" : "${SWARM_UUID}",
   "debug_logging" : ${NODE_DEBUG_LOGGING},
   "log_to_stdout" : true
+  "monitor_address" : "datadog",
+  "monitor_port": 8125,
 }

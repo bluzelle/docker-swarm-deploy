@@ -19,3 +19,17 @@ services:
       - "8080"
     volumes:
       - /tmp:/tmp/swarm_home
+    restart: on-failure:5
+
+  datadog:
+    image: datadog/agent:latest
+    environment:
+     - API_KEY=${DATADOG_API_KEY}
+     - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
+    ports:
+      - "8125:8125/udp"
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock:ro
+     - /proc/:/host/proc/:ro
+     - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
+
