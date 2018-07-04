@@ -52,5 +52,5 @@ ETHEREUM_ADDRESS=0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a
 8. Launch the swarm inside docker using the compose file.
 
 ```
-$ docker-compose up
+$ docker-compose pull && docker-compose run
 ```
