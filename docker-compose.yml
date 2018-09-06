@@ -10,6 +10,7 @@ services:
       SWARM_UUID: "92b8bac6-3242-452a-9090-1aa48afd71a3"
       SWARM_NAME: "swarm01"
       SWARM_PORT: "51010"
+      HTTP_PORT: "8080"
       SWARM_BOOTSTRAP_URL: "http://${LOCAL_IP}/peerlist.json"
       NODE_DEBUG_LOGGING: "true"
       LOCAL_IP: ${LOCAL_IP}
@@ -34,6 +35,7 @@ services:
       SWARM_UUID: "c864516b-3c95-4721-ad3e-a8dccd0d8349"
       SWARM_NAME: "swarm02"
       SWARM_PORT: "51010"
+      HTTP_PORT: "8080"
       SWARM_BOOTSTRAP_URL: "http://${LOCAL_IP}/peerlist.json"
       NODE_DEBUG_LOGGING: "true"
       LOCAL_IP: ${LOCAL_IP}
@@ -58,6 +60,7 @@ services:
         SWARM_UUID: "137a8403-52ec-43b7-8083-91391d4c5e67"
         SWARM_NAME: "swarm03"
         SWARM_PORT: "51010"
+        HTTP_PORT: "8080"
         SWARM_BOOTSTRAP_URL: "http://${LOCAL_IP}/peerlist.json"
         NODE_DEBUG_LOGGING: "true"
         LOCAL_IP: ${LOCAL_IP}

@@ -23,7 +23,8 @@ RUN set -x \
         bluzelle-swarmdb \
         libprotobuf-dev \
         protobuf-compiler \
-        libstdc++6
+        libstdc++6 \
+        g++-7
 
 ARG SWARM_NAME
 
