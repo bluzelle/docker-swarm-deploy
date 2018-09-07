@@ -10,7 +10,7 @@ RUN set -x \
         software-properties-common \
         python-software-properties
 
-ARG DEBIAN_COMPONENT=stable
+ARG DEBIAN_COMPONENT=unstable
 
 RUN sh -c "echo 'deb https://bluzelle.jfrog.io/bluzelle/debian-local all $DEBIAN_COMPONENT' >> /etc/apt/sources.list"
 RUN sh -c "echo 'deb http://ppa.launchpad.net/maarten-fonville/protobuf/ubuntu trusty main' >> /etc/apt/sources.list"
