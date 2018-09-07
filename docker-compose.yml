@@ -2,7 +2,7 @@ version: '3'
 
 services:
   swarm01:
-    image: bluzelle/swarmdb:latest
+    image: bluzelle/swarmdb:travis-53
     ports:
       - "51010:51010"
       - "8080:8080"
@@ -27,7 +27,7 @@ services:
       - "peers-server"
       
   swarm02:
-    image: bluzelle/swarmdb:latest
+    image: bluzelle/swarmdb:travis-53
     ports:
       - "51011:51010"
       - "8081:8081"
@@ -52,7 +52,7 @@ services:
       - "peers-server"
 
   swarm03:
-      image: bluzelle/swarmdb:latest
+      image: bluzelle/swarmdb:travis-53
       ports:
         - "51012:51010"
         - "8082:8082"
