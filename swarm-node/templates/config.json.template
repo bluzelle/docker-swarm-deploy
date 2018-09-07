@@ -1,7 +1,7 @@
 {
   "listener_address" : "0.0.0.0",
   "listener_port" : 51010,
-  "http_port" : 8080
+  "http_port" : 8080,
   "ethereum" : "${ETHEREUM_ADDRESS}",
   "ethereum_io_api_token" : "${ETHEREUM_IO_API_TOKEN}",
   "bootstrap_url" : "${SWARM_BOOTSTRAP_URL}",
