@@ -8,7 +8,8 @@ RUN set -x \
         gettext-base \
         libjsoncpp-dev \
         software-properties-common \
-        python-software-properties
+        python-software-properties \
+        libsnappy-dev
 
 ARG DEBIAN_COMPONENT=stable
 
