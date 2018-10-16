@@ -6,5 +6,8 @@
   "bootstrap_url" : "${SWARM_BOOTSTRAP_URL}",
   "uuid" : "${SWARM_UUID}",
   "debug_logging" : ${NODE_DEBUG_LOGGING},
-  "log_to_stdout" : true
+  "log_to_stdout" : true,
+  "monitor_address" : ${LOCAL_IP}",
+  "monitor_port": 8125,
+  "audit_enabled": true
 }
