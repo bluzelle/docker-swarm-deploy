@@ -4,7 +4,13 @@
   "ethereum" : "${ETHEREUM_ADDRESS}",
   "ethereum_io_api_token" : "${ETHEREUM_IO_API_TOKEN}",
   "bootstrap_url" : "${SWARM_BOOTSTRAP_URL}",
-  "uuid" : "${SWARM_UUID}",
   "debug_logging" : ${NODE_DEBUG_LOGGING},
-  "log_to_stdout" : true
+  "log_to_stdout" : false,
+  "audit_enabled" : true,
+  "use_pbft" : true,
+  "public_key_file" : "/opt/swarm_home/${SWARM_NAME}/public-key.pem",
+  "private_key_file" : "/opt/swarm_home/${SWARM_NAME}/private-key.pem",
+  "crypto_enabled_outgoing" : true,
+  "crypto_enabled_incoming" : false,
+  "chaos_testing_enabled" : false
 }

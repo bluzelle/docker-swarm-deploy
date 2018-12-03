@@ -9,6 +9,7 @@ RUN set -x \
         libjsoncpp-dev \
         software-properties-common \
         python-software-properties \
+        wget \
         libsnappy-dev
 
 ARG DEBIAN_COMPONENT=stable
@@ -26,15 +27,26 @@ RUN set -x \
         protobuf-compiler \
         libstdc++6
 
+
+
 ARG SWARM_NAME
 
-COPY templates/config.json.template /tmp
+RUN mkdir -p /opt/swarm_home
+RUN cd /opt/swarm_home \
+    && wget -c "https://raw.githubusercontent.com/bluzelle/swarmDB/devel/scripts/generate-key" \
+    && chmod a+x generate-key
 
-RUN mkdir -p /tmp/swarm_home && cd /tmp/swarm_home
 
-WORKDIR /tmp/swarm_home
+COPY templates/config.json.template /opt/swarm_home
+
+WORKDIR /opt/swarm_home
 
 ENTRYPOINT mkdir -p ${SWARM_NAME} \
+    && echo "--- INTIAILIZING SWARM KEYS ---" \
+    && bash /opt/swarm_home/generate-key /opt/swarm_home/${SWARM_NAME} \
     && cd ${SWARM_NAME} \
-    && envsubst < /tmp/config.json.template > config-${SWARM_NAME}.json \
-    && swarm -c config-${SWARM_NAME}.json
+    && echo "--- CREATING SWARM CONFIGURATION ---" \
+    && envsubst < /opt/swarm_home/config.json.template > /opt/swarm_home/${SWARM_NAME}/config-${SWARM_NAME}.json \
+    && cat /opt/swarm_home/${SWARM_NAME}/config-${SWARM_NAME}.json \
+    && echo "--- STARTING SWARM NODE ${SWARM_NAME} ---" \
+    && swarm -c /opt/swarm_home/${SWARM_NAME}/config-${SWARM_NAME}.json
