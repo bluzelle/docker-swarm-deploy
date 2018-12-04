@@ -73,6 +73,20 @@ services:
       depends_on:
         - "peers-server"
 
+
+  graphite:
+      image: graphiteapp/graphite-statsd
+      ports:
+        - "8125:8125/udp"
+        - "28080:80"
+      expose:
+        - "8125/udp"
+        - "28080"
+      networks:
+        - swarmnet
+      volumes:
+        - /tmp:/tmp/swarm_home
+
   peers-server:
     image: bluzelle/peerlist-server
     ports:
