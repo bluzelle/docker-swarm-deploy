@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  swarm01:
+    image: bluzelle/swarmdb:${SWARMDB_TAG}
+    ports:
+      - "51010:51010"
+      - "8080:8080"
+    environment:
+      SWARM_NAME: "node_0"
+      SWARM_PORT: "51010"
+      SWARM_BOOTSTRAP_URL: "http://${LOCAL_IP}/peerlist.json"
+      NODE_DEBUG_LOGGING: "true"
+      LOCAL_IP: ${LOCAL_IP}
+      ETHEREUM_ADDRESS: ${ETHEREUM_ADDRESS}
+      ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
+    expose:
+      - "51010"
+      - "8080"
+    networks:
+      - swarmnet
+    volumes:
+      -  ${SWARM_HOME}:/opt/bluzelle/swarm_home
+    depends_on:
+      - "peers-server"
+    restart: on-failure
+
+networks:
+  swarmnet:
+    driver: bridge

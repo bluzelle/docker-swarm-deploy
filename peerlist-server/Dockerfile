@@ -9,10 +9,14 @@ RUN set -x \
 
 EXPOSE 8080
 RUN mkdir -p /var/www
+RUN mkdir -p /opt/bluzelle/ \
+    &&  mkdir -p /opt/bluzelle/swarm_home
 
-COPY templates/peerlist.json.template /tmp/peerlist.json.template
+COPY generate-config.py /opt/bluzelle/generate_config.py
+RUN chmod a+x /opt/bluzelle/generate_config.py
 
-ENTRYPOINT envsubst < /tmp/peerlist.json.template > /var/www/peerlist.json \
+ENTRYPOINT /opt/bluzelle/generate_config.py \
+    && envsubst < /opt/bluzelle/swarm_home/peerlist.json.template > /var/www/peerlist.json \
     && cd /var/www \
     && python -m SimpleHTTPServer 8080
 
