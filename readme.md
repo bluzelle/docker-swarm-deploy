@@ -29,7 +29,6 @@ If you do not see `inet <ipaddress>`, run `ifconfig` and comb through manually t
 LOCAL_IP=192.168.0.34
 ...
 ```
-
 4. Create an account with Etherscan: https://etherscan.io/register
 
 5. Create an Etherscan API KEY by clicking Developers -> API-KEYs.
@@ -41,15 +40,23 @@ LOCAL_IP=192.168.0.34
 ETHEREUM_IO_API_TOKEN=***********************
 ...
 ```
-
 7. Modify the .env file to include an Ethereum mainnet address that contains tokens or use the sample address provided below.
-
 ```
 ...
 ETHEREUM_ADDRESS=0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a
 ...
 ```
-8. Launch the swarm inside docker using the compose file.
+8. Setup a swarm-home directory and place the directory in the .env file
+```
+
+$ mkdir $HOME/swarm_home
+
+...
+SWARM_HOME=$HOME/swarm_home
+...
+
+```
+9. Launch the swarm inside docker using the compose file.
 
 ```
 $ docker-compose up
