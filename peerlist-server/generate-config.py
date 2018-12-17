@@ -34,7 +34,7 @@ def get_node_uuid(node_id, working_directory):
         for line in node_pub_key:
             lines.append(line)
 
-        node_uuid = "".join(map(lambda x: x.strip(), lines[1:-2]))
+        node_uuid = "".join(map(lambda x: x.strip(), lines[1:-1]))
         logger.debug("uuid: {}".format(node_uuid))
         return node_uuid
 
@@ -58,7 +58,7 @@ def make_node_config(node_id, working_directory):
         "bootstrap_url": "${SWARM_BOOTSTRAP_URL}",
         "debug_logging": "${NODE_DEBUG_LOGGING}",
         "log_to_stdout": True,
-        "audit_enabled": False,
+        "audit_enabled": True,
         "use_pbft": True,
         "public_key_file": "{0}/public-key.pem".format(get_node_path(node_id, working_directory)),
         "private_key_file": "{0}/private-key.pem".format(get_node_path(node_id, working_directory)),
