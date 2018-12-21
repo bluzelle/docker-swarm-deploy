@@ -39,20 +39,20 @@ def get_node_uuid(node_id, working_directory):
         return node_uuid
 
 
-def make_peerlist_entry(uuid, node_id):
+def make_peerlist_entry(uuid, node_id, same_port=False):
     return {
         'name': "node_{}".format(node_id),
         'host': "${LOCAL_IP}",
-        'port': 51010 + node_id,
+        'port':  51010 + (0 if same_port else node_id),
         'http_port': 8080 + node_id,
         'uuid': uuid
     }
 
 
-def make_node_config(node_id, working_directory):
+def make_node_config(node_id, same_port=False):
     return {
         "listener_address": "0.0.0.0",
-        "listener_port": 51010 + node_id,
+        "listener_port": 51010 + (0 if same_port else node_id),
         "ethereum": "${ETHEREUM_ADDRESS}",
         "ethereum_io_api_token": "${ETHEREUM_IO_API_TOKEN}",
         "bootstrap_url": "${SWARM_BOOTSTRAP_URL}",
@@ -60,17 +60,17 @@ def make_node_config(node_id, working_directory):
         "log_to_stdout": True,
         "audit_enabled": True,
         "use_pbft": True,
-        "public_key_file": "{0}/public-key.pem".format(get_node_path(node_id, working_directory)),
-        "private_key_file": "{0}/private-key.pem".format(get_node_path(node_id, working_directory)),
+        "public_key_file": "/opt/bluzelle/swarm_node/public-key.pem",
+        "private_key_file": "/opt/bluzelle/swarm_node/private-key.pem",
         "crypto_enabled_outgoing": True,
-        "crypto_enabled_incoming": False,
+        "crypto_enabled_incoming": True,
         "chaos_testing_enabled": False,
         "monitor_address": "graphite",
         "monitor_port": 8125
     }
 
 
-def generate_configs(num_nodes, working_directory):
+def generate_configs(num_nodes, working_directory, same_port=False):
 
     peers = []
 
@@ -87,9 +87,9 @@ def generate_configs(num_nodes, working_directory):
 
         uuid = get_node_uuid(node_id, working_directory)
 
-        peers.append(make_peerlist_entry(uuid, node_id))
+        peers.append(make_peerlist_entry(uuid, node_id, same_port))
 
-        config = make_node_config(node_id, working_directory)
+        config = make_node_config(node_id, same_port)
 
         logger.debug("config: {}".format(json.dumps(config)))
 
@@ -108,9 +108,10 @@ if __name__ == "__main__":
 
     parser.add_argument("-o", "--output", type=str, default="/opt/bluzelle/swarm_home", help="output directory for generated configurations")
     parser.add_argument("-n", "--nodes", type=int, default=3, help="number of nodes to generate configurations")
+    parser.add_argument("--sameport", action='store_true', help="Create a peerlist with all nodes on the same port")
 
     args = parser.parse_args()
-    generate_configs(args.nodes, args.output)
+    generate_configs(args.nodes, args.output, args.sameport)
 
 
 
