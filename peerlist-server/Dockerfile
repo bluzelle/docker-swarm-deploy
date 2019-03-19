@@ -15,7 +15,9 @@ RUN mkdir -p /opt/bluzelle/ \
 COPY generate-config.py /opt/bluzelle/generate_config.py
 RUN chmod a+x /opt/bluzelle/generate_config.py
 
-ENTRYPOINT /opt/bluzelle/generate_config.py \
+ARG NUM_NODES
+
+ENTRYPOINT /opt/bluzelle/generate_config.py -n ${NUM_NODES} \
     && envsubst < /opt/bluzelle/swarm_home/peerlist.json.template > /var/www/peerlist.json \
     && cd /var/www \
     && python -m SimpleHTTPServer 8080

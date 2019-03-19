@@ -52,14 +52,13 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
 def make_node_config(node_id, same_port=False):
     return {
         "listener_address": "0.0.0.0",
-        "listener_port": 51010 + (0 if same_port else node_id),
+        "listener_port": 51010,
         "ethereum": "${ETHEREUM_ADDRESS}",
         "ethereum_io_api_token": "${ETHEREUM_IO_API_TOKEN}",
         "bootstrap_url": "${SWARM_BOOTSTRAP_URL}",
         "debug_logging": "${NODE_DEBUG_LOGGING}",
         "log_to_stdout": True,
         "audit_enabled": True,
-        "use_pbft": True,
         "public_key_file": "/opt/bluzelle/swarm_home/node_{}/public-key.pem".format(node_id),
         "private_key_file": "/opt/bluzelle/swarm_home/node_{}/private-key.pem".format(node_id),
         "crypto_enabled_outgoing": True,

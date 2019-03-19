@@ -29,7 +29,7 @@ services:
   swarm02:
     image: bluzelle/swarmdb:${SWARMDB_TAG}
     ports:
-      - "51011:51011"
+      - "51011:51010"
       - "8081:8081"
     environment:
       SWARM_NAME: "node_1"
@@ -53,7 +53,7 @@ services:
   swarm03:
     image: bluzelle/swarmdb:${SWARMDB_TAG}
     ports:
-      - "51012:51012"
+      - "51012:51010"
       - "8082:8082"
     environment:
       SWARM_NAME: "node_2"
@@ -66,6 +66,102 @@ services:
     expose:
       - "51012"
       - "8082"
+    networks:
+      - swarmnet
+    volumes:
+      - ${SWARM_HOME}:/opt/bluzelle/swarm_home
+    depends_on:
+      - "peers-server"
+    restart: on-failure
+
+  swarm04:
+    image: bluzelle/swarmdb:${SWARMDB_TAG}
+    ports:
+      - "51013:51010"
+      - "8083:8083"
+    environment:
+      SWARM_NAME: "node_3"
+      SWARM_PORT: "51010"
+      SWARM_BOOTSTRAP_URL: "http://${LOCAL_IP}/peerlist.json"
+      NODE_DEBUG_LOGGING: "true"
+      LOCAL_IP: ${LOCAL_IP}
+      ETHEREUM_ADDRESS: ${ETHEREUM_ADDRESS}
+      ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
+    expose:
+      - "51013"
+      - "8083"
+    networks:
+      - swarmnet
+    volumes:
+      - ${SWARM_HOME}:/opt/bluzelle/swarm_home
+    depends_on:
+      - "peers-server"
+    restart: on-failure
+
+  swarm05:
+    image: bluzelle/swarmdb:${SWARMDB_TAG}
+    ports:
+      - "51014:51010"
+      - "8084:8084"
+    environment:
+      SWARM_NAME: "node_4"
+      SWARM_PORT: "51010"
+      SWARM_BOOTSTRAP_URL: "http://${LOCAL_IP}/peerlist.json"
+      NODE_DEBUG_LOGGING: "true"
+      LOCAL_IP: ${LOCAL_IP}
+      ETHEREUM_ADDRESS: ${ETHEREUM_ADDRESS}
+      ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
+    expose:
+      - "51014"
+      - "8084"
+    networks:
+      - swarmnet
+    volumes:
+      - ${SWARM_HOME}:/opt/bluzelle/swarm_home
+    depends_on:
+      - "peers-server"
+    restart: on-failure
+
+  swarm06:
+    image: bluzelle/swarmdb:${SWARMDB_TAG}
+    ports:
+      - "51015:51010"
+      - "8085:8085"
+    environment:
+      SWARM_NAME: "node_5"
+      SWARM_PORT: "51010"
+      SWARM_BOOTSTRAP_URL: "http://${LOCAL_IP}/peerlist.json"
+      NODE_DEBUG_LOGGING: "true"
+      LOCAL_IP: ${LOCAL_IP}
+      ETHEREUM_ADDRESS: ${ETHEREUM_ADDRESS}
+      ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
+    expose:
+      - "51015"
+      - "8085"
+    networks:
+      - swarmnet
+    volumes:
+      - ${SWARM_HOME}:/opt/bluzelle/swarm_home
+    depends_on:
+      - "peers-server"
+    restart: on-failure
+
+  swarm07:
+    image: bluzelle/swarmdb:${SWARMDB_TAG}
+    ports:
+      - "51016:51010"
+      - "8086:8086"
+    environment:
+      SWARM_NAME: "node_6"
+      SWARM_PORT: "51010"
+      SWARM_BOOTSTRAP_URL: "http://${LOCAL_IP}/peerlist.json"
+      NODE_DEBUG_LOGGING: "true"
+      LOCAL_IP: ${LOCAL_IP}
+      ETHEREUM_ADDRESS: ${ETHEREUM_ADDRESS}
+      ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
+    expose:
+      - "51016"
+      - "8086"
     networks:
       - swarmnet
     volumes:
@@ -93,6 +189,7 @@ services:
       - "80:8080"
     environment:
       LOCAL_IP: ${LOCAL_IP}
+      NUM_NODES: 7
     expose:
       - "8080"
     volumes:
