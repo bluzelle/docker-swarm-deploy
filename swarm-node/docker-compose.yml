@@ -14,17 +14,24 @@ services:
       LOCAL_IP: ${LOCAL_IP}
       ETHEREUM_ADDRESS: ${ETHEREUM_ADDRESS}
       ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
+      STATSD_COLLECTOR: ${STATSD_COLLECTOR}
     expose:
       - "51010"
       - "8080"
-    networks:
-      - swarmnet
     volumes:
       -  ${SWARM_HOME}:/opt/bluzelle/swarm_home
-    depends_on:
-      - "peers-server"
     restart: on-failure
 
-networks:
-  swarmnet:
-    driver: bridge
+  signalfx:
+      image: quay.io/signalfx/signalfx-agent:4.5.0
+      environment:
+        - SFX_ACCESS_TOKEN=${SFX_TOKEN}
+        - SFX_INGEST_URL=https://ingest.us1.signalfx.com
+        - COLLECTD_HOSTNAME=amastracci-blz
+      volumes:
+        - /:/hostfs:ro
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /opt/bluzelle/signalfx/:/etc/signalfx/:ro
+      expose:
+        - "8125/udp"
+
