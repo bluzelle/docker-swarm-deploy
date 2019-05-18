@@ -7,9 +7,9 @@ services:
       - "51010:51010"
       - "8080:8080"
     environment:
-      SWARM_NAME: ${NODE_NAME}
+      SWARM_NAME: node_0
       SWARM_PORT: "51010"
-      SWARM_BOOTSTRAP_URL: "http://testnet-infra.bluzelle.com/peerlist.json"
+      # SWARM_BOOTSTRAP_URL: "http://testnet-infra.bluzelle.com/peerlist.json"
       NODE_DEBUG_LOGGING: "true"
       LOCAL_IP: ${LOCAL_IP}
       ETHEREUM_ADDRESS: ${ETHEREUM_ADDRESS}
@@ -21,8 +21,8 @@ services:
       - swarmnet
     volumes:
       -  ${SWARM_HOME}:/opt/bluzelle/swarm_home
-    depends_on:
-      - "peers-server"
+    # depends_on:
+    #   - "peers-server"
     restart: on-failure
 
 networks:
