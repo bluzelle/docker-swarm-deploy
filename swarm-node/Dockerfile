@@ -25,7 +25,8 @@ RUN set -x \
         bluzelle-swarmdb \
         libprotobuf-dev \
         protobuf-compiler \
-        libstdc++6
+        libstdc++6 \
+        python3
 
 ARG SWARM_NAME
 
@@ -34,9 +35,11 @@ RUN mkdir -p /opt/bluzelle/ \
 
 WORKDIR /opt/bluzelle/swarm_home/
 
+
 ENTRYPOINT cd ${SWARM_NAME} \
     && echo "--- CREATING SWARM CONFIGURATION ---" \
     && envsubst < /opt/bluzelle/swarm_home/${SWARM_NAME}/bluzelle.json.template > /opt/bluzelle/swarm_home/${SWARM_NAME}/bluzelle.json \
     && cat /opt/bluzelle/swarm_home/${SWARM_NAME}/bluzelle.json \
     && echo "--- STARTING SWARM NODE ${SWARM_NAME} ---" \
     && swarm -c /opt/bluzelle/swarm_home/${SWARM_NAME}/bluzelle.json
+
