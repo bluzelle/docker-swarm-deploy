@@ -477,8 +477,13 @@ def make_node_config(node_id, same_port=False):
 def generate_configs(num_nodes, working_directory, same_port=False):
 
     peers = []
+    no_gap_swarms = []
 
-    logger.info('SWARM LIST WITH NODES: {}'.format(contract_instance.functions.getSwarmList().call()))
+    for swarm in contract_instance.functions.getSwarmList().call():
+      if swarm != '':
+        no_gap_swarms.append(swarm)
+
+    logger.info('SWARM LIST WITH NODES: {}'.format(no_gap_swarms))
     logger.info('NUMBER OF SWARMS: {}'.format(str(contract_instance.functions.getSwarmCount().call())))
 
     ####remove the BluzelleDockerSwarm test before re-adding
