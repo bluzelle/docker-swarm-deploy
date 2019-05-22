@@ -386,10 +386,15 @@ abi = '''
 contract_instance = w3.eth.contract(address=contract_address, abi=abi)
 
 def run_command(command):
-    logger.debug("Executing: {}".format(command))
-    with open(os.devnull) as dev_null:
-        subprocess.call(command, shell=True, stderr=dev_null, stdout=dev_null)
+  logger.debug("Executing: {}".format(command))
+  with open(os.devnull) as dev_null:
+      subprocess.call(command, shell=True, stderr=dev_null, stdout=dev_null)
 
+def get_host_ip():
+  ([l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] 
+    if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 53)), 
+    s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, 
+    socket.SOCK_DGRAM)]][0][1]]) if l][0][0])
 
 def get_node_path(node_id, working_directory):
     node_name = "node_{}".format(node_id)
@@ -416,10 +421,7 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
     ####Add node to BluzelleDockerSwarm
     nonce = w3.eth.getTransactionCount(acct.address)
     node_name = "node_{}".format(node_id)
-    node_host = ([l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] 
-      if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 53)), 
-      s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, 
-      socket.SOCK_DGRAM)]][0][1]]) if l][0][0])
+    node_host = get_host_ip()
     node_port = 51010 + (0 if same_port else node_id)
     node_http_port = 8080 + node_id
     node_uuid = uuid
@@ -475,13 +477,8 @@ def make_node_config(node_id, same_port=False):
 def generate_configs(num_nodes, working_directory, same_port=False):
 
     peers = []
-    no_gap_swarms = []
 
-    for swarm in contract_instance.functions.getSwarmList().call():
-      if swarm != '':
-        no_gap_swarms.append(swarm)
-
-    logger.info('SWARM LIST WITH NODES: {}'.format(no_gap_swarms))
+    logger.info('SWARM LIST WITH NODES: {}'.format(contract_instance.functions.getSwarmList().call()))
     logger.info('NUMBER OF SWARMS: {}'.format(str(contract_instance.functions.getSwarmCount().call())))
 
     ####remove the BluzelleDockerSwarm test before re-adding
@@ -525,7 +522,6 @@ def generate_configs(num_nodes, working_directory, same_port=False):
     for node_id in range(0, num_nodes):
         node_path = get_node_path(node_id, working_directory)
         try:
-            logger.info(node_path)
             os.mkdir(node_path)
         except OSError:
             logger.info("Config directory already exists for: {}".format(node_id))
@@ -574,8 +570,3 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     generate_configs(args.nodes, args.output, args.sameport)
-
-
-
-
-
