@@ -527,6 +527,7 @@ def generate_configs(num_nodes, working_directory, same_port=False):
     # logger.info('Finished removal of swarm.')
 
     for node_id in range(0, num_nodes):
+        node_id = "{0}_{1}".format(node_id,"SWARM_NODE_NAME")
         node_path = get_node_path(node_id, working_directory)
         try:
             os.mkdir(node_path)
