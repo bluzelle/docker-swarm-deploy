@@ -7,7 +7,7 @@ services:
       - "51010:51010"
       - "8080:8080"
     environment:
-      SWARM_NAME: node_0
+      SWARM_NAME: node_0_SWARM_NAME_REPLACE
       SWARM_PORT: "51010"
       SWARM_BOOTSTRAP_URL: "http://testnet-infra.bluzelle.com/peerlist.json"
       NODE_DEBUG_LOGGING: "true"
