@@ -478,51 +478,53 @@ def generate_configs(num_nodes, working_directory, same_port=False):
 
     peers = []
     no_gap_swarms = []
+    swarm_list = contract_instance.functions.getSwarmList().call()
 
-    for swarm in contract_instance.functions.getSwarmList().call():
+    for swarm in swarm_list:
       if swarm != '':
         no_gap_swarms.append(swarm)
 
-    logger.info('SWARM LIST WITH NODES: {}'.format(no_gap_swarms))
+    if "BluzelleDockerSwarm" not in no_gap_swarms:
+      ####Add the BluzelleDockerSwarm test
+      nonce = w3.eth.getTransactionCount(acct.address)
+      txn_add = contract_instance.functions.addSwarm("BluzelleDockerSwarm", 
+      10,
+      "REGION_COUNTRY",
+      True,
+      "Disk",
+      10,
+      []).buildTransaction({
+        'chainId': 3,
+        'nonce': nonce,
+        'gas': 5500000,
+        'gasPrice': w3.eth.gasPrice
+      })
+      f = open("web3pkey", "r")
+      signed_txn_add = w3.eth.account.signTransaction(txn_add, private_key=f.readline())
+      tx_hash = w3.eth.sendRawTransaction(signed_txn_add.rawTransaction)
+      logger.info('')
+      logger.info('Adding Swarm...')
+      tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+      logger.info('Finished adding of swarm.')
+
+    logger.info('CURRENT SWARM LIST: {}'.format(no_gap_swarms))
     logger.info('NUMBER OF SWARMS: {}'.format(str(contract_instance.functions.getSwarmCount().call())))
 
-    ####remove the BluzelleDockerSwarm test before re-adding
-    nonce = w3.eth.getTransactionCount(acct.address)
-    txn_remove = contract_instance.functions.removeSwarm("BluzelleDockerSwarm").buildTransaction({
-      'chainId': 3,
-      'nonce': nonce,
-      'gas': 5500000,
-      'gasPrice': w3.eth.gasPrice
-    })
-    f = open("web3pkey", "r")
-    signed_txn_remove = w3.eth.account.signTransaction(txn_remove, private_key=f.readline())
-    tx_hash = w3.eth.sendRawTransaction(signed_txn_remove.rawTransaction)
-    logger.info('')
-    logger.info('Removing Swarm...')
-    tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-    logger.info('Finished removal of swarm.')
-
-    ####Add the BluzelleDockerSwarm test
-    nonce = w3.eth.getTransactionCount(acct.address)
-    txn_add = contract_instance.functions.addSwarm("BluzelleDockerSwarm", 
-    10,
-    "Canada",
-    True,
-    "In-Memory",
-    10,
-    []).buildTransaction({
-      'chainId': 3,
-      'nonce': nonce,
-      'gas': 5500000,
-      'gasPrice': w3.eth.gasPrice
-    })
-    f = open("web3pkey", "r")
-    signed_txn_add = w3.eth.account.signTransaction(txn_add, private_key=f.readline())
-    tx_hash = w3.eth.sendRawTransaction(signed_txn_add.rawTransaction)
-    logger.info('')
-    logger.info('Adding Swarm...')
-    tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-    logger.info('Finished adding of swarm.')
+    # ####remove the BluzelleDockerSwarm test before re-adding
+    # nonce = w3.eth.getTransactionCount(acct.address)
+    # txn_remove = contract_instance.functions.removeSwarm("BluzelleDockerSwarm").buildTransaction({
+    #   'chainId': 3,
+    #   'nonce': nonce,
+    #   'gas': 5500000,
+    #   'gasPrice': w3.eth.gasPrice
+    # })
+    # f = open("web3pkey", "r")
+    # signed_txn_remove = w3.eth.account.signTransaction(txn_remove, private_key=f.readline())
+    # tx_hash = w3.eth.sendRawTransaction(signed_txn_remove.rawTransaction)
+    # logger.info('')
+    # logger.info('Removing Swarm...')
+    # tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+    # logger.info('Finished removal of swarm.')
 
     for node_id in range(0, num_nodes):
         node_path = get_node_path(node_id, working_directory)
