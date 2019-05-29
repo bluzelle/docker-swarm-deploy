@@ -37,7 +37,7 @@ services:
   signalfx:
       image: quay.io/signalfx/signalfx-agent:4.5.0
       environment:
-        - SFX_ACCESS_TOKEN=${SFX_TOKEN}
+        - SFX_ACCESS_TOKEN=REPLACE_SFX_TOKEN
         - SFX_INGEST_URL=https://ingest.us1.signalfx.com
         - COLLECTD_HOSTNAME=amastracci-blz
       volumes:
