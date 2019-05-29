@@ -422,8 +422,10 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
     nonce = w3.eth.getTransactionCount(acct.address)
     node_name = "node_{}".format(node_id)
     node_host = get_host_ip()
-    node_port = 51010 + (0 if same_port else node_id)
-    node_http_port = 8080 + node_id
+    # node_port = 51010 + (0 if same_port else node_id)
+    node_port = 51010
+    # node_http_port = 8080 + node_id
+    node_http_port = 8080
     node_uuid = uuid
 
     txn = contract_instance.functions.addNode("BluzelleDockerSwarm", 
@@ -448,8 +450,10 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
     return {
         'name': "node_{}".format(node_id),
         'host': "${LOCAL_IP}",
-        'port':  51010 + (0 if same_port else node_id),
-        'http_port': 8080 + node_id,
+        # 'port':  51010 + (0 if same_port else node_id),
+        'port':  51010,
+        # 'http_port': 8080 + node_id,
+        'http_port': 8080,
         'uuid': uuid
     }
 
