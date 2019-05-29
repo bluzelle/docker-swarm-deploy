@@ -30,6 +30,10 @@ RUN set -x \
 
 ARG SWARM_NAME
 
+RUN mkdir -p /etc/signalfx/
+
+COPY signalfx/agent.yaml /etc/signalfx/agent.yaml
+
 RUN mkdir -p /opt/bluzelle/ \
     &&  mkdir -p /opt/bluzelle/swarm_home
 
