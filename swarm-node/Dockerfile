@@ -10,7 +10,8 @@ RUN set -x \
         software-properties-common \
         python-software-properties \
         wget \
-        libsnappy-dev
+        libsnappy-dev \
+        netbase
 
 ARG DEBIAN_COMPONENT=unstable
 
