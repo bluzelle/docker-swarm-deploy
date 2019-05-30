@@ -445,7 +445,7 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
     tx_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
     logger.info('')
     logger.info('Adding Node {} to Swarm...'.format(node_id))
-    tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+    tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash,timeout=600)
     logger.info('Finished adding Node to Swarm.')
 
     return {
