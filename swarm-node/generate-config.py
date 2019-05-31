@@ -475,7 +475,8 @@ def make_node_config(node_id, same_port=False):
         "crypto_enabled_incoming": True,
         "chaos_testing_enabled": False,
         "monitor_address": "${STATSD_COLLECTOR}",
-        "monitor_port": 8125
+        "monitor_port": 8125,
+        "ethereum_rpc_url": "ESR_CONTRACT_ADDRESS"
     }
 
 
