@@ -460,7 +460,7 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
 
 def make_node_config(node_id, same_port=False):
     return {
-        "swarm_id": "REPLACE_SWARM_ID",
+        "swarm_id": "SWARM_NODE_NAME",
         "listener_address": "0.0.0.0",
         "listener_port": 51010,
         "ethereum": "${ETHEREUM_ADDRESS}",
