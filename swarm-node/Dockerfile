@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 MAINTAINER support@bluzelle.com
 
 RUN set -x \
@@ -10,12 +10,13 @@ RUN set -x \
         software-properties-common \
         python-software-properties \
         wget \
-        libsnappy-dev
+        libsnappy-dev \
+        netbase
 
 ARG DEBIAN_COMPONENT=unstable
 
 RUN sh -c "echo 'deb https://bluzelle.jfrog.io/bluzelle/debian-local all $DEBIAN_COMPONENT' >> /etc/apt/sources.list"
-RUN sh -c "echo 'deb http://ppa.launchpad.net/maarten-fonville/protobuf/ubuntu trusty main' >> /etc/apt/sources.list"
+RUN sh -c "echo 'deb http://ppa.launchpad.net/maarten-fonville/protobuf/ubuntu xenial main' >> /etc/apt/sources.list"
 
 
 RUN set -x \
