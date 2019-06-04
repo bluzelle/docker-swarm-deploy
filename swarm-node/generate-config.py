@@ -20,7 +20,7 @@ from argparse import RawDescriptionHelpFormatter
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# required to have these files in the peerlist-server directory
+# required to have these files in the peerlist-server directoryimport web3
 # infura = infura link including API key
 i = open("infura", "r")
 w3 = Web3(HTTPProvider(i.readline()))
@@ -557,8 +557,15 @@ def generate_configs(num_nodes, working_directory, same_port=False):
 
     logger.info('')
     logger.info('')
+
+    no_gap_nodes = []
     swarm_nodes = contract_instance.functions.getNodeList("BluzelleDockerSwarm").call()
-    for swarm_node in swarm_nodes:
+    
+    for nodes in swarm_nodes:
+      if nodes != '':
+        no_gap_nodes.append(nodes)
+
+    for swarm_node in no_gap_nodes:
       node_info = contract_instance.functions.getNodeInfo("BluzelleDockerSwarm",swarm_node).call()
       logger.info("--------ADDED NODE INFO TO ESR--------")
       logger.info('NODE UUID: {}'.format(swarm_node))
