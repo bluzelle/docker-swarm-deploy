@@ -417,7 +417,7 @@ def get_node_uuid(node_id, working_directory):
 
 
 def make_peerlist_entry(uuid, node_id, same_port=False):
-    
+    gas_price = w3.toWei(30, 'gwei')
     ####Add node to BluzelleDockerSwarm
     nonce = w3.eth.getTransactionCount(acct.address, block_identifier='pending')
     node_name = "node_{}".format(node_id)
@@ -436,8 +436,8 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
     node_uuid).buildTransaction({
       'chainId': 3,
       'nonce': nonce,
-      'gas': 5500000,
-      'gasPrice': w3.eth.gasPrice
+      'gas': 500000,
+      'gasPrice': gas_price
     })
     f = open("web3pkey", "r")
     signed_txn = w3.eth.account.signTransaction(txn, private_key=f.readline())
@@ -479,7 +479,7 @@ def make_node_config(node_id, same_port=False):
 
 
 def generate_configs(num_nodes, working_directory, same_port=False):
-
+    gas_price = w3.toWei(30, 'gwei')
     peers = []
     no_gap_swarms = []
     swarm_list = contract_instance.functions.getSwarmList().call()
@@ -500,8 +500,8 @@ def generate_configs(num_nodes, working_directory, same_port=False):
       []).buildTransaction({
         'chainId': 3,
         'nonce': nonce,
-        'gas': 5500000,
-        'gasPrice': w3.eth.gasPrice
+        'gas': 500000,
+        'gasPrice': gas_price
       })
       f = open("web3pkey", "r")
       signed_txn_add = w3.eth.account.signTransaction(txn_add, private_key=f.readline())
