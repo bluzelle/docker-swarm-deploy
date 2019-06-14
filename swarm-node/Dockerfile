@@ -4,9 +4,8 @@ MAINTAINER support@bluzelle.com
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN set -x \
-    && export DEBIAN_FRONTEND=noninteractive \
     && apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ca-certificates \
         apt-transport-https \
         gettext-base \
         libjsoncpp-dev \
@@ -25,7 +24,7 @@ RUN sh -c "echo 'deb http://ppa.launchpad.net/maarten-fonville/protobuf/ubuntu x
 RUN set -x \
     && add-apt-repository ppa:ubuntu-toolchain-r/test \
     && apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates --allow-unauthenticated \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ca-certificates --allow-unauthenticated \
         bluzelle-swarmdb \
         libprotobuf-dev \
         protobuf-compiler \
