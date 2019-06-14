@@ -1,7 +1,10 @@
 FROM ubuntu:16.04
 MAINTAINER support@bluzelle.com
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN set -x \
+    && export DEBIAN_FRONTEND=noninteractive \
     && apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates \
         apt-transport-https \
