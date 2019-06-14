@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  swarm01:
+  REPLACE_DOCKER_STACK:
     image: bluzelle/swarmdb:${SWARMDB_TAG}
     ports:
       - "51010:51010"
