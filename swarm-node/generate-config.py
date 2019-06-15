@@ -32,7 +32,7 @@ ra = open("ropsten_account", "r")
 
 acct = w3.eth.account.privateKeyToAccount(f.readline())
 contract_address = Web3.toChecksumAddress(ra.readline())
-nonce = w3.eth.getTransactionCount(acct.address, block_identifier="pending")
+nonce = w3.eth.getTransactionCount(acct.address)
 abi = '''
 [
     {
