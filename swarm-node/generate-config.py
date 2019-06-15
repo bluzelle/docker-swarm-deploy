@@ -32,7 +32,7 @@ ra = open("ropsten_account", "r")
 
 acct = w3.eth.account.privateKeyToAccount(f.readline())
 contract_address = Web3.toChecksumAddress(ra.readline())
-
+nonce = w3.eth.getTransactionCount(acct.address, block_identifier="pending")
 abi = '''
 [
     {
@@ -419,7 +419,6 @@ def get_node_uuid(node_id, working_directory):
 def make_peerlist_entry(uuid, node_id, same_port=False):
     gas_price = w3.toWei(30, 'gwei')
     ####Add node to BluzelleDockerSwarm
-    nonce = w3.eth.getTransactionCount(acct.address)
     node_name = "node_{}".format(node_id)
     node_host = get_host_ip()
     # node_port = 51010 + (0 if same_port else node_id)
@@ -435,7 +434,7 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
     node_port,
     node_uuid).buildTransaction({
       'chainId': 3,
-      'nonce': nonce,
+      'nonce': nonce + 1,
       'gas': 500000,
       'gasPrice': gas_price
     })
@@ -491,7 +490,6 @@ def generate_configs(num_nodes, working_directory, same_port=False):
 
     if "BluzelleDockerSwarm" not in no_gap_swarms:
       ####Add the BluzelleDockerSwarm test
-      nonce = w3.eth.getTransactionCount(acct.address)
       txn_add = contract_instance.functions.addSwarm("BluzelleDockerSwarm", 
       10,
       "REGION_COUNTRY",
@@ -500,7 +498,7 @@ def generate_configs(num_nodes, working_directory, same_port=False):
       10,
       []).buildTransaction({
         'chainId': 3,
-        'nonce': nonce,
+        'nonce': nonce + 1,
         'gas': 500000,
         'gasPrice': gas_price
       })
