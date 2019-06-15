@@ -458,8 +458,6 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
 
     logger.info('CURRENT SWARM LIST: {}'.format(no_gap_swarms))
     logger.info('NUMBER OF SWARMS: {}'.format(str(contract_instance.functions.getSwarmCount().call())))
-    # remove
-    node_host="127.0.0.1"
     txn = contract_instance.functions.addNode("BluzelleDockerSwarm", 
     node_host,
     node_name,
