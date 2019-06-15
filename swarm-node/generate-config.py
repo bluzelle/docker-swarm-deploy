@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python3
 
 import logging
 import os
@@ -419,7 +419,7 @@ def get_node_uuid(node_id, working_directory):
 def make_peerlist_entry(uuid, node_id, same_port=False):
     gas_price = w3.toWei(30, 'gwei')
     ####Add node to BluzelleDockerSwarm
-    nonce = w3.eth.getTransactionCount(acct.address, block_identifier='pending')
+    nonce = w3.eth.getTransactionCount(acct.address) + w3.eth.getBlockTransactionCount('pending')
     node_name = "node_{}".format(node_id)
     node_host = get_host_ip()
     # node_port = 51010 + (0 if same_port else node_id)
@@ -491,7 +491,7 @@ def generate_configs(num_nodes, working_directory, same_port=False):
 
     if "BluzelleDockerSwarm" not in no_gap_swarms:
       ####Add the BluzelleDockerSwarm test
-      nonce = w3.eth.getTransactionCount(acct.address, block_identifier='pending')
+      nonce = w3.eth.getTransactionCount(acct.address)
       txn_add = contract_instance.functions.addSwarm("BluzelleDockerSwarm", 
       10,
       "REGION_COUNTRY",
@@ -509,7 +509,7 @@ def generate_configs(num_nodes, working_directory, same_port=False):
       tx_hash = w3.eth.sendRawTransaction(signed_txn_add.rawTransaction)
       logger.info('')
       logger.info('Adding Swarm...')
-      tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+      tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash,timeout=600)
       logger.info('Finished adding of swarm.')
 
     logger.info('CURRENT SWARM LIST: {}'.format(no_gap_swarms))
