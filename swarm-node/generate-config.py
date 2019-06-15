@@ -32,7 +32,7 @@ ra = open("ropsten_account", "r")
 
 acct = w3.eth.account.privateKeyToAccount(f.readline())
 contract_address = Web3.toChecksumAddress(ra.readline())
-nonce = w3.eth.getTransactionCount(acct.address, block_identifier="pending")
+
 abi = '''
 [
     {
@@ -384,6 +384,7 @@ abi = '''
 '''
 
 contract_instance = w3.eth.contract(address=contract_address, abi=abi)
+no_gap_swarms = []
 
 def run_command(command):
   logger.debug("Executing: {}".format(command))
@@ -417,7 +418,6 @@ def get_node_uuid(node_id, working_directory):
 
 
 def make_peerlist_entry(uuid, node_id, same_port=False):
-    gas_price = w3.toWei(30, 'gwei')
     ####Add node to BluzelleDockerSwarm
     node_name = "node_{}".format(node_id)
     node_host = get_host_ip()
@@ -427,6 +427,39 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
     node_http_port = 8080
     node_uuid = uuid
 
+    gas_price = w3.toWei(30, 'gwei')
+    swarm_list = contract_instance.functions.getSwarmList().call()
+
+    for swarm in swarm_list:
+      if swarm != '' or swarm not in no_gap_swarms:
+        no_gap_swarms.append(swarm)
+
+    if "BluzelleDockerSwarm" not in no_gap_swarms:
+      ####Add the BluzelleDockerSwarm test
+      txn_add = contract_instance.functions.addSwarm("BluzelleDockerSwarm", 
+      10,
+      "REGION_COUNTRY",
+      True,
+      "Disk",
+      10,
+      []).buildTransaction({
+        'chainId': 3,
+        'nonce': w3.eth.getTransactionCount(acct.address, block_identifier="pending"),
+        'gas': 500000,
+        'gasPrice': gas_price
+      })
+      f = open("web3pkey", "r")
+      signed_txn_add = w3.eth.account.signTransaction(txn_add, private_key=f.readline())
+      tx_hash = w3.eth.sendRawTransaction(signed_txn_add.rawTransaction)
+      logger.info('')
+      logger.info('Adding Swarm...')
+      tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash,timeout=600)
+      logger.info('Finished adding of swarm.')
+
+    logger.info('CURRENT SWARM LIST: {}'.format(no_gap_swarms))
+    logger.info('NUMBER OF SWARMS: {}'.format(str(contract_instance.functions.getSwarmCount().call())))
+    # remove
+    node_host="127.0.0.1"
     txn = contract_instance.functions.addNode("BluzelleDockerSwarm", 
     node_host,
     node_name,
@@ -434,7 +467,7 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
     node_port,
     node_uuid).buildTransaction({
       'chainId': 3,
-      'nonce': nonce + 1,
+      'nonce': w3.eth.getTransactionCount(acct.address, block_identifier="pending"),
       'gas': 500000,
       'gasPrice': gas_price
     })
@@ -479,62 +512,14 @@ def make_node_config(node_id, same_port=False):
 
 
 def generate_configs(num_nodes, working_directory, same_port=False):
-    gas_price = w3.toWei(30, 'gwei')
     peers = []
-    no_gap_swarms = []
-    swarm_list = contract_instance.functions.getSwarmList().call()
-
-    for swarm in swarm_list:
-      if swarm != '':
-        no_gap_swarms.append(swarm)
-
-    if "BluzelleDockerSwarm" not in no_gap_swarms:
-      ####Add the BluzelleDockerSwarm test
-      txn_add = contract_instance.functions.addSwarm("BluzelleDockerSwarm", 
-      10,
-      "REGION_COUNTRY",
-      True,
-      "Disk",
-      10,
-      []).buildTransaction({
-        'chainId': 3,
-        'nonce': nonce,
-        'gas': 500000,
-        'gasPrice': gas_price
-      })
-      f = open("web3pkey", "r")
-      signed_txn_add = w3.eth.account.signTransaction(txn_add, private_key=f.readline())
-      tx_hash = w3.eth.sendRawTransaction(signed_txn_add.rawTransaction)
-      logger.info('')
-      logger.info('Adding Swarm...')
-      tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash,timeout=600)
-      logger.info('Finished adding of swarm.')
-
-    logger.info('CURRENT SWARM LIST: {}'.format(no_gap_swarms))
-    logger.info('NUMBER OF SWARMS: {}'.format(str(contract_instance.functions.getSwarmCount().call())))
-
-    # ####remove the BluzelleDockerSwarm test before re-adding
-    # nonce = w3.eth.getTransactionCount(acct.address)
-    # txn_remove = contract_instance.functions.removeSwarm("BluzelleDockerSwarm").buildTransaction({
-    #   'chainId': 3,
-    #   'nonce': nonce,
-    #   'gas': 5500000,
-    #   'gasPrice': w3.eth.gasPrice
-    # })
-    # f = open("web3pkey", "r")
-    # signed_txn_remove = w3.eth.account.signTransaction(txn_remove, private_key=f.readline())
-    # tx_hash = w3.eth.sendRawTransaction(signed_txn_remove.rawTransaction)
-    # logger.info('')
-    # logger.info('Removing Swarm...')
-    # tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-    # logger.info('Finished removal of swarm.')
-
     for node_id in range(0, num_nodes):
         node_id = "{0}_{1}".format(node_id,"SWARM_NODE_NAME")
         node_path = get_node_path(node_id, working_directory)
         try:
             os.mkdir(node_path)
-        except OSError:
+        except OSError as e:
+            print(str(e))
             logger.info("Config directory already exists for: {}".format(node_id))
             return
 
@@ -583,7 +568,7 @@ if __name__ == "__main__":
 
 
     parser.add_argument("-o", "--output", type=str, default="/opt/bluzelle/swarm_home", help="output directory for generated configurations")
-    parser.add_argument("-n", "--nodes", type=int, default=3, help="number of nodes to generate configurations")
+    parser.add_argument("-n", "--nodes", type=int, default=1, help="number of nodes to generate configurations")
     parser.add_argument("--sameport", action='store_true', help="Create a peerlist with all nodes on the same port")
 
     args = parser.parse_args()
