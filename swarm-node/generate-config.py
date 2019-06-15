@@ -32,7 +32,7 @@ ra = open("ropsten_account", "r")
 
 acct = w3.eth.account.privateKeyToAccount(f.readline())
 contract_address = Web3.toChecksumAddress(ra.readline())
-nonce = w3.eth.getTransactionCount(acct.address)
+nonce = w3.eth.getTransactionCount(acct.address, block_identifier="pending")
 abi = '''
 [
     {
@@ -498,7 +498,7 @@ def generate_configs(num_nodes, working_directory, same_port=False):
       10,
       []).buildTransaction({
         'chainId': 3,
-        'nonce': nonce + 1,
+        'nonce': nonce,
         'gas': 500000,
         'gasPrice': gas_price
       })
