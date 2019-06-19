@@ -172,12 +172,12 @@ abi = '''
           "type": "string"
         },
         {
-          "name": "nodeHttpPort",
+          "name": "nodePort",
           "type": "uint256"
         },
         {
-          "name": "nodePort",
-          "type": "uint256"
+          "name": "nodeUUID",
+          "type": "string"
         },
         {
           "name": "nodeUUID",
@@ -318,12 +318,12 @@ abi = '''
           "type": "string"
         },
         {
-          "name": "nodeHttpPort",
-          "type": "uint256"
-        },
-        {
           "name": "nodeName",
           "type": "string"
+        },
+        {
+          "name": "nodePort",
+          "type": "uint256"
         },
         {
           "name": "nodePort",
