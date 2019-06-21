@@ -424,7 +424,7 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
     # node_port = 51010 + (0 if same_port else node_id)
     node_port = 51010
     # node_http_port = 8080 + node_id
-    node_http_port = 8080
+    # node_http_port = 8080
     node_uuid = uuid
 
     gas_price = w3.toWei(30, 'gwei')
@@ -461,7 +461,7 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
     txn = contract_instance.functions.addNode("BluzelleDockerSwarm", 
     node_host,
     node_name,
-    node_http_port,
+    # node_http_port,
     node_port,
     node_uuid).buildTransaction({
       'chainId': 3,
@@ -481,7 +481,7 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
         'name': "node_{}".format(node_id),
         'host': "${LOCAL_IP}",
         'port':  51010,
-        'http_port': 8080,
+        # 'http_port': 8080,
         'uuid': uuid
     }
 
@@ -550,7 +550,7 @@ def generate_configs(num_nodes, working_directory, same_port=False):
       logger.info("--------ADDED NODE INFO TO ESR--------")
       logger.info('NODE UUID: {}'.format(swarm_node))
       logger.info('NODE HOST: {}'.format(str(node_info[1])))
-      logger.info('NODE HTTP PORT: {}'.format(str(node_info[2])))
+      # logger.info('NODE HTTP PORT: {}'.format(str(node_info[2])))
       logger.info('NODE NAME: {}'.format(str(node_info[3])))
       logger.info('NODE PORT: {}'.format(str(node_info[4])))
       logger.info("--------------------------------------")
