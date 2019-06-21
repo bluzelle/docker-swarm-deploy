@@ -178,10 +178,6 @@ abi = '''
         {
           "name": "nodeUUID",
           "type": "string"
-        },
-        {
-          "name": "nodeUUID",
-          "type": "string"
         }
       ],
       "name": "addNode",
