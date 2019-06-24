@@ -21,17 +21,6 @@ services:
       -  ${SWARM_HOME}:/opt/bluzelle/swarm_home
     restart: on-failure
 
-  # graphite:
-  #     image: graphiteapp/graphite-statsd
-  #     ports:
-  #       - "8125:8125/udp"
-  #       - "28080:80"
-  #     expose:
-  #       - "8125/udp"
-  #       - "28080"
-  #     volumes:
-  #       - /tmp:/tmp/swarm_home
-
   signalfx:
       image: quay.io/signalfx/signalfx-agent:4.5.0
       environment:
