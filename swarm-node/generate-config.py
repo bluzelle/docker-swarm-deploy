@@ -190,7 +190,7 @@ abi = '''
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function",
-      "signature": "0x1fdedaae"
+      "signature": "0xd3e8abe0"
     },
     {
       "constant": false,
@@ -316,10 +316,6 @@ abi = '''
         {
           "name": "nodeName",
           "type": "string"
-        },
-        {
-          "name": "nodePort",
-          "type": "uint256"
         },
         {
           "name": "nodePort",
