@@ -384,7 +384,7 @@ def run_command(command):
       subprocess.call(command, shell=True, stderr=dev_null, stdout=dev_null)
 
 def get_host_ip():
-  ([l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] 
+  return ([l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] 
     if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 53)), 
     s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, 
     socket.SOCK_DGRAM)]][0][1]]) if l][0][0])
@@ -497,7 +497,8 @@ def make_node_config(node_id, same_port=False):
         "monitor_address": "${STATSD_COLLECTOR}",
         "monitor_port": 8125,
         "swarm_info_esr_address": "ESR_CONTRACT_ADDRESS",
-        "stack": "SWARM_NODE_ENV"
+        "stack": "SWARM_NODE_ENV",
+        "monitor_max_timers" : 100
     }
 
 

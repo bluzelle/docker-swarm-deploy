@@ -3,6 +3,11 @@ version: '3'
 services:
   REPLACE_DOCKER_STACK:
     image: bluzelle/swarmdb:${SWARMDB_TAG}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     ports:
       - "51010:51010"
     environment:
@@ -23,6 +28,11 @@ services:
 
   signalfx:
       image: quay.io/signalfx/signalfx-agent:4.5.0
+      logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
       environment:
         - SFX_ACCESS_TOKEN=REPLACE_SFX_TOKEN
         - SFX_INGEST_URL=https://ingest.us1.signalfx.com
