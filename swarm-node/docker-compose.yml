@@ -13,7 +13,7 @@ services:
     environment:
       SWARM_NAME: node_0_SWARM_NAME_REPLACE
       SWARM_PORT: "51010"
-      SWARM_BOOTSTRAP_URL: "http://testnet-infra.bluzelle.com/peerlist.json"
+      SWARM_BOOTSTRAP_URL: "peers.json"
       NODE_DEBUG_LOGGING: "true"
       LOCAL_IP: ${LOCAL_IP}
       ETHEREUM_ADDRESS: ${ETHEREUM_ADDRESS}
