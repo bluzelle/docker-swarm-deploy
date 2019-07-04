@@ -31,7 +31,7 @@ services:
       logging:
         driver: "json-file"
         options:
-          max-size: "10m"
+          max-size: "150m"
           max-file: "3"
       environment:
         - SFX_ACCESS_TOKEN=REPLACE_SFX_TOKEN
