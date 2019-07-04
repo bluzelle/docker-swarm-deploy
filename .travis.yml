@@ -9,7 +9,6 @@ env:
 
   matrix:
     - REPO=bluzelle/swarmdb           DOCKERFILE_DIR=swarm-node
-    - REPO=bluzelle/peerlist-server   DOCKERFILE_DIR=peerlist-server
 
 before_install:
   - docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}"
