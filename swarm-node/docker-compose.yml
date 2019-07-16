@@ -22,8 +22,8 @@ services:
       NUM_NODES: 1
     ulimits:
       core:
-        soft: "99999999999"
-        hard: "99999999999"
+        soft: 99999999999
+        hard: 99999999999
     security_opt:
       - seccomp:unconfined
     expose:
