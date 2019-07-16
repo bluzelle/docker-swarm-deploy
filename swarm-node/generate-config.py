@@ -544,8 +544,8 @@ def generate_configs(num_nodes, working_directory, same_port=False):
       logger.info('NODE UUID: {}'.format(swarm_node))
       logger.info('NODE HOST: {}'.format(str(node_info[1])))
       # logger.info('NODE HTTP PORT: {}'.format(str(node_info[2])))
-      logger.info('NODE NAME: {}'.format(str(node_info[3])))
-      logger.info('NODE PORT: {}'.format(str(node_info[4])))
+      logger.info('NODE NAME: {}'.format(str(node_info[2])))
+      logger.info('NODE PORT: {}'.format(str(node_info[3])))
       logger.info("--------------------------------------")
 
     logger.debug(map(lambda peer: json.dumps(peer), peers))

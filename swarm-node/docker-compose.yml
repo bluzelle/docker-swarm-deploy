@@ -6,7 +6,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "10m"
+        max-size: "150m"
         max-file: "3"
     ports:
       - "51010:51010"
@@ -20,6 +20,12 @@ services:
       ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
       STATSD_COLLECTOR: "signalfx"
       NUM_NODES: 1
+    ulimits:
+      core:
+        soft: "-1"
+        hard: "-1"
+    security_opt:
+      - seccomp:unconfined
     expose:
       - "51010"
     volumes:
