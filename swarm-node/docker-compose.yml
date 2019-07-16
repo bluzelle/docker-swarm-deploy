@@ -22,14 +22,15 @@ services:
       NUM_NODES: 1
     ulimits:
       core:
-        soft: "-1"
-        hard: "-1"
+        soft: "99999999999"
+        hard: "99999999999"
     security_opt:
       - seccomp:unconfined
     expose:
       - "51010"
     volumes:
       -  ${SWARM_HOME}:/opt/bluzelle/swarm_home
+      - /tmp/cores:/tmp/cores
     restart: on-failure
 
   signalfx:
