@@ -42,6 +42,7 @@ RUN mkdir -p /opt/bluzelle/ \
 
 WORKDIR /opt/bluzelle/swarm_home/
 
+RUN mkdir /cores
 
 ENTRYPOINT cd ${SWARM_NAME} \
     && echo "--- CREATING SWARM CONFIGURATION ---" \
