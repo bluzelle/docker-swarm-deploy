@@ -42,8 +42,6 @@ COPY signalfx/agent.yaml /etc/signalfx/agent.yaml
 RUN mkdir -p /usr/share/logstash/pipeline/
 COPY logstash/logstash.conf /usr/share/logstash/pipeline/logstash.conf
 
-ENV 'http://elasticsearch:9200'
-
 RUN mkdir -p /opt/bluzelle/ \
     &&  mkdir -p /opt/bluzelle/swarm_home
 
