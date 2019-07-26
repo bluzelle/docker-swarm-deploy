@@ -3,11 +3,18 @@ version: '3'
 services:
   REPLACE_DOCKER_STACK:
     image: bluzelle/swarmdb:${SWARMDB_TAG}
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "150m"
+    #     max-file: "3"
     logging:
-      driver: "json-file"
+      driver: gelf
       options:
-        max-size: "150m"
-        max-file: "3"
+        gelf-address: udp://localhost:12201
+        tag: "testnet"
+    depends_on:
+      - logstash
     ports:
       - "51010:51010"
     environment:
@@ -32,6 +39,45 @@ services:
       -  ${SWARM_HOME}:/opt/bluzelle/swarm_home
       - /tmp/cores:/tmp/cores
     restart: on-failure
+
+  # ELK STACK
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.2.0
+    ports:
+      - "12201:12201/udp"
+      - "5044:5044"
+    environment:
+      - "xpack.monitoring.elasticsearch.url=http://ELASTIC_URL:9200"
+    volumes:
+      - /usr/share/logstash/pipeline:/usr/share/logstash/pipeline
+    depends_on:
+      - elasticsearch
+    command: logstash -f /usr/share/logstash/pipeline/ --config.reload.automatic
+    expose:
+      - "12201/udp"
+      - "5044"
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.2.0
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_URL: http://ELASTIC_URL:9200
+      XPACK_SECURITY_ENABLED: "false"
+    depends_on:
+      - elasticsearch
+    expose:
+      - "5601"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    ports:
+      - "9200:9200"
+    environment:
+      - "http.host=0.0.0.0"
+      - "transport.host=127.0.0.1"
+      - "ES_JAVA_OPTS=-Xmx2g -Xms2g"
+      - "xpack.security.enabled=false"
+    expose:
+      - "9200"
 
   signalfx:
       image: quay.io/signalfx/signalfx-agent:4.5.0
