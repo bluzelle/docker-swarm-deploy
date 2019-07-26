@@ -49,7 +49,7 @@ services:
     environment:
       - "xpack.monitoring.elasticsearch.url=http://ELASTIC_URL:9200"
     volumes:
-      - .:/usr/share/logstash/pipeline
+      - /usr/share/logstash/pipeline:/usr/share/logstash/pipeline
     depends_on:
       - elasticsearch
     command: logstash -f /usr/share/logstash/pipeline/ --config.reload.automatic

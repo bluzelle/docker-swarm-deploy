@@ -39,8 +39,8 @@ RUN mkdir -p /etc/signalfx/
 
 COPY signalfx/agent.yaml /etc/signalfx/agent.yaml
 
-RUN sudo mkdir -p /usr/share/logstash/pipeline/
-COPY sudo logstash/logstash.conf /usr/share/logstash/pipeline/logstash.conf
+RUN mkdir -p /usr/share/logstash/pipeline/
+COPY logstash/logstash.conf /usr/share/logstash/pipeline/logstash.conf
 
 RUN mkdir -p /opt/bluzelle/ \
     &&  mkdir -p /opt/bluzelle/swarm_home
