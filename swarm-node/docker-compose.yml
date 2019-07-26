@@ -47,7 +47,7 @@ services:
       - "12201:12201/udp"
       - "5044:5044"
     environment:
-      - "xpack.monitoring.elasticsearch.url=http://elasticsearch:9200"
+      - "xpack.monitoring.elasticsearch.url=http://ELASTIC_URL:9200"
     volumes:
       - .:/usr/share/logstash/pipeline
     depends_on:
@@ -61,7 +61,7 @@ services:
     ports:
       - "5601:5601"
     environment:
-      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_URL: http://ELASTIC_URL:9200
       XPACK_SECURITY_ENABLED: "false"
     depends_on:
       - elasticsearch
