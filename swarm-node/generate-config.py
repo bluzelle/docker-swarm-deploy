@@ -12,7 +12,6 @@ import socket
 
 from web3 import Web3, HTTPProvider
 from web3.contract import ConciseContract
-from web3.personal import Personal
 
 from argparse import ArgumentParser
 from argparse import RawDescriptionHelpFormatter
