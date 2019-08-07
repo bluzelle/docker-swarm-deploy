@@ -483,9 +483,9 @@ def make_node_config(node_id, same_port=False):
         "swarm_id": "SWARM_NODE_NAME",
         "listener_address": "0.0.0.0",
         "listener_port": 51010,
-        "ethereum": "${ETHEREUM_ADDRESS}",
-        "ethereum_io_api_token": "${ETHEREUM_IO_API_TOKEN}",
-        "bootstrap_url": "${SWARM_BOOTSTRAP_URL}",
+        # "ethereum": "${ETHEREUM_ADDRESS}",
+        # "ethereum_io_api_token": "${ETHEREUM_IO_API_TOKEN}",
+        # "bootstrap_url": "${SWARM_BOOTSTRAP_URL}",
         "debug_logging": "${NODE_DEBUG_LOGGING}",
         "log_to_stdout": True,
         "audit_enabled": True,
@@ -498,7 +498,8 @@ def make_node_config(node_id, same_port=False):
         "monitor_port": 8125,
         "swarm_info_esr_address": "ESR_CONTRACT_ADDRESS",
         "stack": "SWARM_NODE_ENV",
-        "monitor_max_timers" : 100
+        "monitor_max_timers" : 100,
+        "mem_storage": False
     }
 
 
