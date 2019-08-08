@@ -484,7 +484,7 @@ def make_node_config(node_id, same_port=False):
         "listener_port": 51010,
         # "ethereum": "${ETHEREUM_ADDRESS}",
         # "ethereum_io_api_token": "${ETHEREUM_IO_API_TOKEN}",
-        # "bootstrap_url": "${SWARM_BOOTSTRAP_URL}",
+        "bootstrap_url": "${SWARM_BOOTSTRAP_URL}",
         "debug_logging": "${NODE_DEBUG_LOGGING}",
         "log_to_stdout": True,
         "audit_enabled": True,
