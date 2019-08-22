@@ -6,7 +6,7 @@ services:
     logging:
       driver: gelf
       options:
-        gelf-address: udp://13.56.13.64:12201
+        gelf-address: udp://13.57.242.214:12201
         tag: "testnet"
     ports:
       - "51010:51010"
