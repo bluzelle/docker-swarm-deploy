@@ -498,7 +498,7 @@ def make_node_config(node_id, same_port=False):
         "swarm_info_esr_address": "ESR_CONTRACT_ADDRESS",
         "stack": "SWARM_NODE_ENV",
         "monitor_max_timers" : 100,
-        "mem_storage": False
+        # "mem_storage": False
     }
 
 
@@ -514,7 +514,7 @@ def generate_configs(num_nodes, working_directory, same_port=False):
             logger.info("Config directory already exists for: {}".format(node_id))
             return
 
-        run_command("openssl ecparam -name secp256r1 -genkey -noout -out {}/private-key.pem".format(node_path))
+        run_command("openssl ecparam -name secp256k1 -genkey -noout -out {}/private-key.pem".format(node_path))
         run_command("openssl ec -in {0}/private-key.pem -pubout -out {0}/public-key.pem".format(node_path))
 
         uuid = get_node_uuid(node_id, working_directory)

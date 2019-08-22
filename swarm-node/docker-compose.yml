@@ -10,6 +10,7 @@ services:
         tag: "testnet"
     ports:
       - "51010:51010"
+      - "12201:12201"
     environment:
       SWARM_NAME: node_0_SWARM_NAME_REPLACE
       SWARM_PORT: "51010"
