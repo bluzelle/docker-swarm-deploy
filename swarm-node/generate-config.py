@@ -409,7 +409,7 @@ def get_node_uuid(node_id, working_directory):
 
 
 def make_peerlist_entry(uuid, node_id, same_port=False):
-    ####Add node to BluzelleDockerSwarm
+    ####Add node to ankr-1
     node_name = "node_{}".format(node_id)
     node_host = get_host_ip()
     # node_port = 51010 + (0 if same_port else node_id)
@@ -425,11 +425,11 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
       if swarm != '' or swarm not in no_gap_swarms:
         no_gap_swarms.append(swarm)
 
-    if "BluzelleDockerSwarm" not in no_gap_swarms:
-      ####Add the BluzelleDockerSwarm test
-      txn_add = contract_instance.functions.addSwarm("BluzelleDockerSwarm", 
+    if "ankr-1" not in no_gap_swarms:
+      ####Add the ankr-1 test
+      txn_add = contract_instance.functions.addSwarm("ankr-1", 
       10,
-      "REGION_COUNTRY",
+      "us-west-1",
       True,
       "Disk",
       10,
@@ -449,7 +449,7 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
 
     logger.info('CURRENT SWARM LIST: {}'.format(no_gap_swarms))
     logger.info('NUMBER OF SWARMS: {}'.format(str(contract_instance.functions.getSwarmCount().call())))
-    txn = contract_instance.functions.addNode("BluzelleDockerSwarm", 
+    txn = contract_instance.functions.addNode("ankr-1", 
     node_host,
     node_name,
     # node_http_port,
@@ -479,7 +479,7 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
 
 def make_node_config(node_id, same_port=False):
     return {
-        "swarm_id": "SWARM_NODE_NAME",
+        "swarm_id": "ankr-1",
         "listener_address": "0.0.0.0",
         "listener_port": 51010,
         # "ethereum": "${ETHEREUM_ADDRESS}",
@@ -495,8 +495,8 @@ def make_node_config(node_id, same_port=False):
         "chaos_testing_enabled": False,
         "monitor_address": "${STATSD_COLLECTOR}",
         "monitor_port": 8125,
-        "swarm_info_esr_address": "ESR_CONTRACT_ADDRESS",
-        "stack": "SWARM_NODE_ENV",
+        "swarm_info_esr_address": "54ff9e1d251133317c8e5cc91013c26e036cb17c",
+        "stack": "ankr",
         "monitor_max_timers" : 100,
         # "mem_storage": False
     }
@@ -505,7 +505,7 @@ def make_node_config(node_id, same_port=False):
 def generate_configs(num_nodes, working_directory, same_port=False):
     peers = []
     for node_id in range(0, num_nodes):
-        node_id = "{0}_{1}".format(node_id,"SWARM_NODE_NAME")
+        node_id = "{0}_{1}".format(node_id,"ankr-1")
         node_path = get_node_path(node_id, working_directory)
         try:
             os.mkdir(node_path)
@@ -532,14 +532,14 @@ def generate_configs(num_nodes, working_directory, same_port=False):
     logger.info('')
 
     no_gap_nodes = []
-    swarm_nodes = contract_instance.functions.getNodeList("BluzelleDockerSwarm").call()
+    swarm_nodes = contract_instance.functions.getNodeList("ankr-1").call()
     
     for nodes in swarm_nodes:
       if nodes != '':
         no_gap_nodes.append(nodes)
 
     for swarm_node in no_gap_nodes:
-      node_info = contract_instance.functions.getNodeInfo("BluzelleDockerSwarm",swarm_node).call()
+      node_info = contract_instance.functions.getNodeInfo("ankr-1",swarm_node).call()
       logger.info("--------ADDED NODE INFO TO ESR--------")
       logger.info('NODE UUID: {}'.format(swarm_node))
       logger.info('NODE HOST: {}'.format(str(node_info[1])))

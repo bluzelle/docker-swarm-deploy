@@ -1,18 +1,18 @@
 version: '3'
 
 services:
-  REPLACE_DOCKER_STACK:
+  Swarm-ankr-ankr-1:
     image: bluzelle/swarmdb:${SWARMDB_TAG}
     logging:
       driver: gelf
       options:
         gelf-address: udp://13.56.223.193:12201
-        tag:
+        tag: "ankr-PUBLIC_IP_OF_NODE"
     ports:
       - "51010:51010"
       - "12201:12201"
     environment:
-      SWARM_NAME: node_0_SWARM_NAME_REPLACE
+      SWARM_NAME: node_0_ankr-1
       SWARM_PORT: "51010"
       SWARM_BOOTSTRAP_URL: "http://testnet-infra.bluzelle.com/peerlist.json"
       NODE_DEBUG_LOGGING: "true"
