@@ -4,6 +4,7 @@ services:
   logstash:
     image: docker.elastic.co/logstash/logstash:7.2.0
     ports:
+      - "12201:12201"
       - "12201:12201/udp"
       - "5044:5044"
     environment:
@@ -14,6 +15,7 @@ services:
       - elasticsearch
     command: logstash -f /usr/share/logstash/pipeline/ --config.reload.automatic
     expose:
+      - "12201:12201"
       - "12201/udp"
       - "5044"
   kibana:
