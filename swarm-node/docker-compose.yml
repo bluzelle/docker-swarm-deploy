@@ -19,7 +19,7 @@ services:
       LOCAL_IP: ${LOCAL_IP}
       ETHEREUM_ADDRESS: ${ETHEREUM_ADDRESS}
       ETHEREUM_IO_API_TOKEN: ${ETHEREUM_IO_API_TOKEN}
-      STATSD_COLLECTOR: "signalfx"
+      # STATSD_COLLECTOR: "signalfx"
       NUM_NODES: 1
     ulimits:
       core:
