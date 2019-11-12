@@ -57,7 +57,8 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
         'Content-Type': 'application/json',
         'X-API-Key': 'BLUZELLE_API_KEY'
     }
-    data = '{"host":"'+ node_host +'","name":"'+ node_name +'","port":' + node_port + ',"uuid":"' + node_uuid + '"}'
+
+    data = '{"host":"{0}","name":"{1}","port":"{2}","uuid":"{3}"}'.format(node_host, node_name, node_port, node_uuid)
     response = requests.patch('https://cpr.bluzelle.com/api/v1/swarms/SWARM_NODE_NAME', headers=headers, data=data)
 
     if response.status_code == 200:
@@ -119,7 +120,7 @@ def generate_configs(num_nodes, working_directory, same_port=False):
     headers = {
         'accept': 'application/json',
     }
-    response = requests.get('https://cpr-dev.bluzelle.com/api/v1/swarms', headers=headers)
+    response = requests.get('https://cpr.bluzelle.com/api/v1/swarms', headers=headers)
     obj = json.loads(response.text)
     # this will be replaced by the bash script
     peers = obj["SWARM_NODE_NAME"]
