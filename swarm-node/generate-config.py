@@ -65,7 +65,7 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
             "uuid": node_uuid
     }
     response = requests.patch('https://cpr.bluzelle.com/api/v1/swarms/SWARM_NODE_NAME', headers=headers, data=data)
-
+    print(response.text)
     if response.status_code == 200:
       logger.debug("Peer Added to CPR")
     else:
@@ -127,6 +127,7 @@ def generate_configs(num_nodes, working_directory, same_port=False):
     }
     response = requests.get('https://cpr.bluzelle.com/api/v1/swarms', headers=headers)
     obj = json.loads(response.text)
+    print(obj)
     # this will be replaced by the bash script
     peers = obj["SWARM_NODE_NAME"]
 
