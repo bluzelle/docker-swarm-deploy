@@ -58,12 +58,7 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
         'X-API-Key': 'BLUZELLE_API_KEY'
     }
 
-    data = {
-            "host": node_host,
-            "name": node_name,
-            "port": "{}".format(node_port),
-            "uuid": node_uuid
-        }
+    data = '{host:"{0}",name:"{1}",port:"{2}",uuid:"{3}"}'.format(node_host, node_name, node_port, node_uuid)
     response = requests.patch('https://cpr.bluzelle.com/api/v1/swarms/SWARM_NODE_NAME', headers=headers, data=data)
     print(response.text)
     if response.status_code == 200:
