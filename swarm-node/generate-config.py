@@ -8,9 +8,11 @@ import json
 import time
 import random
 import socket
+import requests
 
 from argparse import ArgumentParser
 from argparse import RawDescriptionHelpFormatter
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -21,12 +23,6 @@ def run_command(command):
   logger.debug("Executing: {}".format(command))
   with open(os.devnull) as dev_null:
       subprocess.call(command, shell=True, stderr=dev_null, stdout=dev_null)
-
-def get_host_ip():
-  return ([l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] 
-    if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 53)), 
-    s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, 
-    socket.SOCK_DGRAM)]][0][1]]) if l][0][0])
 
 def get_node_path(node_id, working_directory):
     node_name = "node_{}".format(node_id)
@@ -52,49 +48,47 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
 
     ####Add node to BluzelleDockerSwarm
     node_name = "node_{}".format(node_id)
-    node_host = get_host_ip()
+    node_host = "HOST_PUB_IP"
     node_port = 51010
     node_uuid = uuid
 
-
-    # turn this into a CPR call
-    # 1) retrieve swarm list
-    # 2) ensure swarm does not exist in list (if it does, add the node to that existing swarm)
-    # 3) execute call
-
-    return {
-        'name': "node_{}".format(node_id),
-        'host': "${LOCAL_IP}",
-        'port':  51010,
-        'uuid': uuid
+    headers = {
+        'accept': '*/*',
+        'Content-Type': 'application/json',
+        'X-API-Key': 'BLUZELLE_API_KEY'
     }
+    data = '{"host":"'+ node_host +'","name":"'+ node_name +'","port":' + node_port + ',"uuid":"' + node_uuid + '"}'
+    response = requests.patch('https://cpr.bluzelle.com/api/v1/swarms/SWARM_NODE_NAME', headers=headers, data=data)
 
+    if response.status_code == 200:
+      logger.debug("Peer Added to CPR")
+    else:
+      logger.debug("Something went wrong, did not add node to CPR")
 
 def make_node_config(node_id, same_port=False):
-    return {
-        "swarm_id": "SWARM_NODE_NAME",
-        "listener_address": "0.0.0.0",
-        "listener_port": 51010,
-        "bootstrap_url": "${SWARM_BOOTSTRAP_URL}",
-        "debug_logging": "${NODE_DEBUG_LOGGING}",
-        "log_to_stdout": True,
-        "audit_enabled": True,
-        "public_key_file": "/opt/bluzelle/swarm_home/node_{}/public-key.pem".format(node_id),
-        "private_key_file": "/opt/bluzelle/swarm_home/node_{}/private-key.pem".format(node_id),
-        "crypto_enabled_outgoing": True,
-        "crypto_enabled_incoming": True,
-        "chaos_testing_enabled": False,
-        "monitor_address": "${STATSD_COLLECTOR}",
-        "monitor_port": 8125,
-        "swarm_info_esr_address": "ESR_CONTRACT_ADDRESS",
-        "stack": "SWARM_NODE_ENV",
-        "monitor_max_timers" : 100,
-        # "mem_storage": False
-    }
+  return {
+      "swarm_id": "SWARM_NODE_NAME",
+      "listener_address": "0.0.0.0",
+      "listener_port": 51010,
+      "bootstrap_url": "${SWARM_BOOTSTRAP_URL}",
+      "debug_logging": "${NODE_DEBUG_LOGGING}",
+      "log_to_stdout": True,
+      "audit_enabled": True,
+      "public_key_file": "/opt/bluzelle/swarm_home/node_{}/public-key.pem".format(node_id),
+      "private_key_file": "/opt/bluzelle/swarm_home/node_{}/private-key.pem".format(node_id),
+      "crypto_enabled_outgoing": True,
+      "crypto_enabled_incoming": True,
+      "chaos_testing_enabled": False,
+      "monitor_address": "${STATSD_COLLECTOR}",
+      "monitor_port": 8125,
+      "stack": "SWARM_NODE_ENV",
+      "monitor_max_timers" : 100,
+      # "mem_storage": False
+  }
 
 
 def generate_configs(num_nodes, working_directory, same_port=False):
-    peers = []
+    peers=[]
     for node_id in range(0, num_nodes):
         node_id = "{0}_{1}".format(node_id,"SWARM_NODE_NAME")
         node_path = get_node_path(node_id, working_directory)
@@ -108,25 +102,35 @@ def generate_configs(num_nodes, working_directory, same_port=False):
         run_command("openssl ecparam -name secp256k1 -genkey -noout -out {}/private-key.pem".format(node_path))
         run_command("openssl ec -in {0}/private-key.pem -pubout -out {0}/public-key.pem".format(node_path))
 
+        # enter node info in CPR
         uuid = get_node_uuid(node_id, working_directory)
+        make_peerlist_entry(uuid, node_id, same_port)
 
-        peers.append(make_peerlist_entry(uuid, node_id, same_port))
-
+        # node config
         config = make_node_config(node_id, same_port)
-
         logger.debug("config: {}".format(json.dumps(config)))
-
         with open(os.path.join(get_node_path(node_id, working_directory), "bluzelle.json.template"), "w") as outfile:
             json.dump(config, outfile, sort_keys=True, indent=4, ensure_ascii=True)
 
     logger.info('')
     logger.info('')
 
+    # create local peerslist (will always be one node unless another node is put up)
+    headers = {
+        'accept': 'application/json',
+    }
+    response = requests.get('https://cpr-dev.bluzelle.com/api/v1/swarms', headers=headers)
+    obj = json.loads(response.text)
+    # this will be replaced by the bash script
+    peers = obj["SWARM_NODE_NAME"]
 
     logger.debug(map(lambda peer: json.dumps(peer), peers))
-    with open(os.path.join(working_directory, "peerlist.json.template"), "w") as outfile:
+    with open(os.path.join(working_directory, "peerlist.json"), "w") as outfile:
         json.dump(peers, outfile, ensure_ascii=True, sort_keys=True, indent=4)
 
+    # for serving the newly created peerslist locally
+    httpd = HTTPServer(('localhost', 8000), SimpleHTTPRequestHandler)
+    httpd.serve_forever()
 
 if __name__ == "__main__":
 
