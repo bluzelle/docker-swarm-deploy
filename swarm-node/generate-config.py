@@ -60,13 +60,12 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
     # turn this into a CPR call
     # 1) retrieve swarm list
     # 2) ensure swarm does not exist in list (if it does, add the node to that existing swarm)
-    # 3) 
+    # 3) execute call
 
     return {
         'name': "node_{}".format(node_id),
         'host': "${LOCAL_IP}",
         'port':  51010,
-        # 'http_port': 8080,
         'uuid': uuid
     }
 
