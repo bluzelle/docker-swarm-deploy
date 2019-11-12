@@ -73,7 +73,6 @@ def make_peerlist_entry(uuid, node_id, same_port=False):
 
 def make_node_config(node_id, same_port=False):
   return {
-      "swarm_id": "SWARM_NODE_NAME",
       "listener_address": "0.0.0.0",
       "listener_port": 51010,
       "bootstrap_url": "${SWARM_BOOTSTRAP_URL}",
@@ -89,6 +88,8 @@ def make_node_config(node_id, same_port=False):
       "monitor_port": 8125,
       "stack": "SWARM_NODE_ENV",
       "monitor_max_timers" : 100,
+      "ignore_esr": True,
+      "ws_idle_timeout": 10000000,
       # "mem_storage": False
   }
 
