@@ -5,13 +5,9 @@ import os
 import subprocess
 import sys
 import json
-import web3
 import time
 import random
 import socket
-
-from web3 import Web3, HTTPProvider
-from web3.contract import ConciseContract
 
 from argparse import ArgumentParser
 from argparse import RawDescriptionHelpFormatter
@@ -19,362 +15,6 @@ from argparse import RawDescriptionHelpFormatter
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# required to have these files in the peerlist-server directoryimport web3
-# infura = infura link including API key
-i = open("infura", "r")
-w3 = Web3(HTTPProvider(i.readline()))
-
-# web3pkey = private key (in hex) of ropsten account
-# ropsten_account = wallet address in ropsten
-f = open("web3pkey", "r")
-ra = open("ropsten_account", "r")
-
-acct = w3.eth.account.privateKeyToAccount(f.readline())
-contract_address = Web3.toChecksumAddress(ra.readline())
-
-abi = '''
-[
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "swarmList",
-      "outputs": [
-        {
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function",
-      "signature": "0x1065707e"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "isActive",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function",
-      "signature": "0x22f3e2d4"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "ownerAddress",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function",
-      "signature": "0x8f84aa09"
-    },
-    {
-      "inputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "constructor",
-      "signature": "constructor"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "swarmID",
-          "type": "string"
-        },
-        {
-          "name": "swarmSize",
-          "type": "uint256"
-        },
-        {
-          "name": "swarmGeo",
-          "type": "string"
-        },
-        {
-          "name": "isTrusted",
-          "type": "bool"
-        },
-        {
-          "name": "swarmType",
-          "type": "string"
-        },
-        {
-          "name": "swarmCost",
-          "type": "uint256"
-        },
-        {
-          "name": "nodeList",
-          "type": "string[]"
-        }
-      ],
-      "name": "addSwarm",
-      "outputs": [
-        {
-          "name": "success",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function",
-      "signature": "0x8b0a5c90"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "swarmID",
-          "type": "string"
-        }
-      ],
-      "name": "removeSwarm",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function",
-      "signature": "0x1aa75a45"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "swarmID",
-          "type": "string"
-        },
-        {
-          "name": "nodeHost",
-          "type": "string"
-        },
-        {
-          "name": "nodeName",
-          "type": "string"
-        },
-        {
-          "name": "nodePort",
-          "type": "uint256"
-        },
-        {
-          "name": "nodeUUID",
-          "type": "string"
-        }
-      ],
-      "name": "addNode",
-      "outputs": [
-        {
-          "name": "success",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function",
-      "signature": "0xd3e8abe0"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "swarmID",
-          "type": "string"
-        },
-        {
-          "name": "nodeUUID",
-          "type": "string"
-        }
-      ],
-      "name": "removeNode",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function",
-      "signature": "0xc324563a"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "swarmID",
-          "type": "string"
-        }
-      ],
-      "name": "getNodeCount",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function",
-      "signature": "0x44be43cd"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "getSwarmCount",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function",
-      "signature": "0xbf82a335"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "swarmID",
-          "type": "string"
-        }
-      ],
-      "name": "getSwarmInfo",
-      "outputs": [
-        {
-          "name": "size",
-          "type": "uint256"
-        },
-        {
-          "name": "geo",
-          "type": "string"
-        },
-        {
-          "name": "trust",
-          "type": "bool"
-        },
-        {
-          "name": "swarmtype",
-          "type": "string"
-        },
-        {
-          "name": "cost",
-          "type": "uint256"
-        },
-        {
-          "name": "nodelist",
-          "type": "string[]"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function",
-      "signature": "0x101c1360"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "swarmID",
-          "type": "string"
-        },
-        {
-          "name": "nodeUUID",
-          "type": "string"
-        }
-      ],
-      "name": "getNodeInfo",
-      "outputs": [
-        {
-          "name": "nodeCount",
-          "type": "uint256"
-        },
-        {
-          "name": "nodeHost",
-          "type": "string"
-        },
-        {
-          "name": "nodeName",
-          "type": "string"
-        },
-        {
-          "name": "nodePort",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function",
-      "signature": "0xcc8575cb"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "getSwarmList",
-      "outputs": [
-        {
-          "name": "",
-          "type": "string[]"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function",
-      "signature": "0x0043d7e7"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "swarmID",
-          "type": "string"
-        }
-      ],
-      "name": "getNodeList",
-      "outputs": [
-        {
-          "name": "",
-          "type": "string[]"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function",
-      "signature": "0x46e76d8b"
-    },
-    {
-      "constant": false,
-      "inputs": [],
-      "name": "deactivateContract",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function",
-      "signature": "0xbca353be"
-    }
-  ]
-'''
-
-contract_instance = w3.eth.contract(address=contract_address, abi=abi)
 no_gap_swarms = []
 
 def run_command(command):
@@ -409,64 +49,18 @@ def get_node_uuid(node_id, working_directory):
 
 
 def make_peerlist_entry(uuid, node_id, same_port=False):
+
     ####Add node to BluzelleDockerSwarm
     node_name = "node_{}".format(node_id)
     node_host = get_host_ip()
-    # node_port = 51010 + (0 if same_port else node_id)
     node_port = 51010
-    # node_http_port = 8080 + node_id
-    # node_http_port = 8080
     node_uuid = uuid
 
-    gas_price = w3.toWei(30, 'gwei')
-    swarm_list = contract_instance.functions.getSwarmList().call()
 
-    for swarm in swarm_list:
-      if swarm != '' or swarm not in no_gap_swarms:
-        no_gap_swarms.append(swarm)
-
-    if "BluzelleDockerSwarm" not in no_gap_swarms:
-      ####Add the BluzelleDockerSwarm test
-      txn_add = contract_instance.functions.addSwarm("BluzelleDockerSwarm", 
-      10,
-      "REGION_COUNTRY",
-      True,
-      "Disk",
-      10,
-      []).buildTransaction({
-        'chainId': 3,
-        'nonce': w3.eth.getTransactionCount(acct.address, block_identifier="pending"),
-        'gas': 500000,
-        'gasPrice': gas_price
-      })
-      f = open("web3pkey", "r")
-      signed_txn_add = w3.eth.account.signTransaction(txn_add, private_key=f.readline())
-      tx_hash = w3.eth.sendRawTransaction(signed_txn_add.rawTransaction)
-      logger.info('')
-      logger.info('Adding Swarm...')
-      tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash,timeout=600)
-      logger.info('Finished adding of swarm.')
-
-    logger.info('CURRENT SWARM LIST: {}'.format(no_gap_swarms))
-    logger.info('NUMBER OF SWARMS: {}'.format(str(contract_instance.functions.getSwarmCount().call())))
-    txn = contract_instance.functions.addNode("BluzelleDockerSwarm", 
-    node_host,
-    node_name,
-    # node_http_port,
-    node_port,
-    node_uuid).buildTransaction({
-      'chainId': 3,
-      'nonce': w3.eth.getTransactionCount(acct.address, block_identifier="pending"),
-      'gas': 500000,
-      'gasPrice': gas_price
-    })
-    f = open("web3pkey", "r")
-    signed_txn = w3.eth.account.signTransaction(txn, private_key=f.readline())
-    tx_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
-    logger.info('')
-    logger.info('Adding Node {} to Swarm...'.format(node_id))
-    tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash,timeout=600)
-    logger.info('Finished adding Node to Swarm.')
+    # turn this into a CPR call
+    # 1) retrieve swarm list
+    # 2) ensure swarm does not exist in list (if it does, add the node to that existing swarm)
+    # 3) 
 
     return {
         'name': "node_{}".format(node_id),
@@ -482,8 +76,6 @@ def make_node_config(node_id, same_port=False):
         "swarm_id": "SWARM_NODE_NAME",
         "listener_address": "0.0.0.0",
         "listener_port": 51010,
-        # "ethereum": "${ETHEREUM_ADDRESS}",
-        # "ethereum_io_api_token": "${ETHEREUM_IO_API_TOKEN}",
         "bootstrap_url": "${SWARM_BOOTSTRAP_URL}",
         "debug_logging": "${NODE_DEBUG_LOGGING}",
         "log_to_stdout": True,
@@ -531,22 +123,6 @@ def generate_configs(num_nodes, working_directory, same_port=False):
     logger.info('')
     logger.info('')
 
-    no_gap_nodes = []
-    swarm_nodes = contract_instance.functions.getNodeList("BluzelleDockerSwarm").call()
-    
-    for nodes in swarm_nodes:
-      if nodes != '':
-        no_gap_nodes.append(nodes)
-
-    for swarm_node in no_gap_nodes:
-      node_info = contract_instance.functions.getNodeInfo("BluzelleDockerSwarm",swarm_node).call()
-      logger.info("--------ADDED NODE INFO TO ESR--------")
-      logger.info('NODE UUID: {}'.format(swarm_node))
-      logger.info('NODE HOST: {}'.format(str(node_info[1])))
-      # logger.info('NODE HTTP PORT: {}'.format(str(node_info[2])))
-      logger.info('NODE NAME: {}'.format(str(node_info[2])))
-      logger.info('NODE PORT: {}'.format(str(node_info[3])))
-      logger.info("--------------------------------------")
 
     logger.debug(map(lambda peer: json.dumps(peer), peers))
     with open(os.path.join(working_directory, "peerlist.json.template"), "w") as outfile:
